@@ -1,9 +1,22 @@
-<svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+<svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title">
   <title id="title">Símbolo MINA</title>
-  <desc id="desc">Círculo azul con diamante dorado al centro, símbolo de valor oculto encontrado.</desc>
-  <circle cx="80" cy="80" r="80" fill="#1A40B8"/>
-  <path d="M33 80C45 61 62 52 80 52C98 52 115 61 127 80C115 99 98 108 80 108C62 108 45 99 33 80Z" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity=".16"/>
-  <path d="M80 50L107 77L80 110L53 77L80 50Z" fill="#F59E0B"/>
-  <path d="M80 50L107 77H53L80 50Z" fill="#FFB22E"/>
-  <path d="M80 110L66 77H94L80 110Z" fill="#C77908" opacity=".34"/>
+  <!-- Fondo squircle azul oscuro -->
+  <rect width="160" height="160" rx="36" fill="#0B1538"/>
+  <!-- Líneas horizontales azul medio -->
+  <rect x="18" y="32" width="124" height="10" rx="5" fill="#1A3080"/>
+  <rect x="18" y="52" width="124" height="10" rx="5" fill="#1A3080"/>
+  <rect x="18" y="72" width="124" height="10" rx="5" fill="#1A3080"/>
+  <rect x="18" y="92" width="124" height="10" rx="5" fill="#1A3080"/>
+  <rect x="18" y="112" width="124" height="10" rx="5" fill="#1A3080"/>
+  <!-- Diamante blanco/crema (outline) -->
+  <path d="M80 24L136 80L80 136L24 80L80 24Z" stroke="#E8E4D9" stroke-width="8" stroke-linejoin="round" fill="none"/>
+  <!-- Barra dorada horizontal -->
+  <rect x="22" y="72" width="116" height="16" rx="8" fill="url(#gold)"/>
+  <defs>
+    <linearGradient id="gold" x1="22" y1="80" x2="138" y2="80" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#F59E0B"/>
+      <stop offset="50%" stop-color="#FBBF24"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+  </defs>
 </svg>
