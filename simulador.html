@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simulador Patrimonial · MINA</title>
+<meta name="description" content="Descubre cómo crece tu patrimonio con un plan de inversión personalizado.">
+<link rel="icon" href="logo-symbol.svg">
+<link rel="stylesheet" href="theme.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Manrope',system-ui,sans-serif;color:var(--texto);background:var(--papel);line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:'Manrope',sans-serif;font-weight:700;letter-spacing:-.02em;line-height:1.15}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:1100px;margin:0 auto;padding:0 28px}
+.kicker{display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--cobalto);font-weight:600}
+.kicker::before{content:"";width:7px;height:7px;background:var(--oro);transform:rotate(45deg);flex:0 0 auto}
+
+/* NAV */
+header.nav{position:sticky;top:0;z-index:100;background:rgba(11,21,56,.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.07)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;padding-top:14px;padding-bottom:14px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;color:#fff}
+.brand img{width:26px;height:26px}
+.nav-back{font-size:13px;color:rgba(255,255,255,.45)}
+.nav-back:hover{color:#fff}
+
+/* HERO */
+.hero{background:var(--subsuelo);padding:52px 0 44px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;top:-120px;right:-80px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.14),transparent 70%);pointer-events:none}
+.hero::after{content:"";position:absolute;bottom:-60px;left:-40px;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(245,158,11,.07),transparent 70%);pointer-events:none}
+.hero .wrap{position:relative;z-index:1}
+.hero-top{margin-bottom:32px}
+.hero h1{color:#fff;font-size:clamp(24px,3.8vw,42px);margin:12px 0 6px;max-width:680px;font-weight:800}
+.hero h1 .name-inline{color:var(--oro);transition:opacity .2s}
+.hero-sub{color:rgba(200,211,232,.7);font-size:15px}
+
+/* NAME INPUT */
+.name-row{display:flex;align-items:center;gap:12px;margin-bottom:28px;flex-wrap:wrap}
+.name-label{font-size:12px;font-weight:600;color:rgba(255,255,255,.4);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.name-input{background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.12);border-radius:10px;padding:10px 16px;font-family:'Manrope',sans-serif;font-size:16px;font-weight:700;color:#fff;width:260px;outline:none;transition:border .2s,background .2s}
+.name-input::placeholder{color:rgba(255,255,255,.2);font-weight:400}
+.name-input:focus{border-color:rgba(245,158,11,.55);background:rgba(255,255,255,.1)}
+
+/* SLIDERS */
+.sliders{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.slider-block{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:18px 20px}
+.sl-label{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(200,211,232,.5);margin-bottom:2px}
+.sl-val{font-family:'IBM Plex Mono',monospace;font-size:28px;font-weight:600;color:#fff;margin-bottom:14px;line-height:1}
+.sl-val em{font-size:13px;color:rgba(200,211,232,.4);font-style:normal;margin-left:4px;font-weight:400}
+input[type=range]{-webkit-appearance:none;width:100%;height:3px;border-radius:2px;background:rgba(255,255,255,.12);outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--oro);cursor:pointer;box-shadow:0 0 0 4px rgba(245,158,11,.18),0 2px 8px rgba(0,0,0,.3);transition:transform .15s,box-shadow .15s}
+input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.15);box-shadow:0 0 0 6px rgba(245,158,11,.25),0 2px 12px rgba(0,0,0,.4)}
+.sl-range{display:flex;justify-content:space-between;font-size:9px;color:rgba(200,211,232,.25);margin-top:8px;font-family:'IBM Plex Mono',monospace;letter-spacing:.04em}
+
+/* ── STATS STRIP ── */
+.stats-strip{background:var(--subsuelo);border-top:1px solid rgba(255,255,255,.07);padding:0}
+.stats-inner{display:grid;grid-template-columns:repeat(4,1fr)}
+.stat-item{padding:24px 28px;position:relative}
+.stat-item:not(:last-child)::after{content:"";position:absolute;right:0;top:20%;height:60%;width:1px;background:rgba(255,255,255,.08)}
+.stat-sl{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(200,211,232,.45);margin-bottom:4px}
+.stat-big{font-family:'IBM Plex Mono',monospace;font-size:clamp(22px,2.5vw,32px);font-weight:600;color:#fff;line-height:1;margin-bottom:3px;transition:color .3s}
+.stat-big.gold{color:var(--oro)}
+.stat-desc{font-size:12px;color:rgba(200,211,232,.45)}
+
+/* ── CHART SECTION ── */
+.chart-sec{padding:32px 0 28px}
+.chart-card{background:#fff;border:1px solid var(--linea);border-radius:18px;padding:28px 28px 20px;box-shadow:0 8px 40px rgba(11,21,56,.08)}
+.chart-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;flex-wrap:wrap;gap:8px}
+.chart-title{font-size:18px;font-weight:700;color:var(--subsuelo)}
+.chart-sub{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);margin-top:2px}
+.tasa-badge{display:flex;flex-direction:column;align-items:flex-end}
+.tasa-badge span:first-child{font-size:10px;color:var(--muted)}
+.tasa-badge span:last-child{font-family:'IBM Plex Mono',monospace;font-size:18px;font-weight:700;color:var(--azul)}
+.phases{display:flex;gap:18px;margin:10px 0 18px;flex-wrap:wrap}
+.phase-tag{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center;gap:5px;color:var(--muted)}
+.phase-dot{width:8px;height:8px;border-radius:50%;flex:0 0 auto}
+.chart-wrap{height:320px}
+
+/* ── MILESTONES ── */
+.miles-sec{padding:0 0 28px}
+.section-head{display:flex;align-items:baseline;gap:14px;margin-bottom:16px}
+.section-head h2{font-size:20px;color:var(--subsuelo)}
+.mile-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.mile{border-radius:14px;padding:20px;position:relative;overflow:hidden;transition:transform .15s}
+.mile:hover{transform:translateY(-2px)}
+.mile-bg{background:#fff;border:1px solid var(--linea)}
+.mile-hi{background:var(--subsuelo)}
+.mile-yr{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px}
+.mile-bg .mile-yr{color:var(--muted)}
+.mile-hi .mile-yr{color:rgba(200,211,232,.45)}
+.mile-num{font-family:'IBM Plex Mono',monospace;font-weight:600;line-height:1;margin-bottom:6px}
+.mile-bg .mile-num{font-size:22px;color:var(--azul)}
+.mile-hi .mile-num{font-size:26px;color:#fff}
+.mile-ap{font-size:11px}
+.mile-bg .mile-ap{color:var(--muted)}
+.mile-hi .mile-ap{color:rgba(200,211,232,.45)}
+.mile-hi::before{content:"";position:absolute;top:-30px;right:-30px;width:100px;height:100px;border-radius:50%;background:rgba(245,158,11,.08)}
+.mile-mult{display:inline-block;margin-top:8px;font-size:11px;font-weight:700;background:rgba(245,158,11,.15);color:var(--oro);border-radius:20px;padding:2px 8px}
+
+/* ── ESPERAR ── */
+.esperar-sec{margin-bottom:28px}
+.esperar-card{background:var(--subsuelo);border-radius:18px;padding:28px;position:relative;overflow:hidden}
+.esperar-card::after{content:"";position:absolute;top:0;right:0;width:300px;height:300px;background:radial-gradient(circle at 100% 0%,rgba(245,158,11,.07),transparent 60%);pointer-events:none}
+.esperar-head{margin-bottom:20px}
+.esperar-head h2{font-size:22px;color:#fff;margin:8px 0 4px}
+.esperar-head p{font-size:14px;color:rgba(200,211,232,.55)}
+.esperar-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;position:relative;z-index:1}
+.esp{border-radius:12px;padding:16px 14px}
+.esp.now{background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.25)}
+.esp.d1,.esp.d2,.esp.d3{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
+.esp-tag{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
+.esp.now .esp-tag{color:var(--oro)}
+.esp:not(.now) .esp-tag{color:rgba(200,211,232,.4)}
+.esp-val{font-family:'IBM Plex Mono',monospace;font-size:20px;font-weight:600;margin-bottom:4px;line-height:1}
+.esp.now .esp-val{color:#fff}
+.esp:not(.now) .esp-val{color:rgba(200,211,232,.7)}
+.esp-loss{font-size:12px;font-weight:700}
+.esp.now .esp-loss{color:rgba(200,211,232,.4)}
+.esp:not(.now) .esp-loss{color:#F87171}
+
+/* ── RESPALDO ── */
+.respaldo{display:flex;align-items:center;gap:16px;padding:16px 20px;background:var(--papel-2);border:1px solid var(--linea);border-radius:12px;margin-bottom:32px;flex-wrap:wrap}
+.respaldo-txt{font-size:12px;color:var(--muted);flex:1;min-width:180px}
+.rb-badges{display:flex;gap:8px;flex-wrap:wrap}
+.rb{background:#fff;border:1px solid var(--linea);border-radius:6px;padding:4px 10px;font-size:11px;font-weight:700;color:var(--subsuelo);letter-spacing:.04em}
+
+/* ── BONO ALLIANZ ── */
+.bono-sec{padding:0 0 28px}
+.bono-card{background:#fff;border:1px solid var(--linea);border-radius:18px;padding:28px;box-shadow:0 4px 20px rgba(11,21,56,.06)}
+.bono-inner{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:center}
+.bono-left h3{font-size:20px;color:var(--subsuelo);margin:8px 0 6px}
+.bono-left p{font-size:14px;color:var(--muted);line-height:1.6;max-width:380px}
+.bono-right{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.bono-item{border-radius:12px;padding:16px;text-align:center}
+.bono-item.b1{background:var(--subsuelo)}
+.bono-item.b2{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.25)}
+.bono-item.b3{background:var(--papel-2);border:1px solid var(--linea)}
+.bono-lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.b1 .bono-lbl{color:rgba(200,211,232,.5)}
+.b2 .bono-lbl{color:var(--oro-oscuro)}
+.b3 .bono-lbl{color:var(--muted)}
+.bono-val{font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:600;line-height:1}
+.b1 .bono-val{color:#fff}
+.b2 .bono-val{color:var(--oro-oscuro);font-size:24px}
+.b3 .bono-val{color:var(--azul)}
+.bono-desc{font-size:11px;margin-top:4px}
+.b1 .bono-desc{color:rgba(200,211,232,.45)}
+.b2 .bono-desc{color:var(--oro-oscuro);opacity:.7}
+.b3 .bono-desc{color:var(--muted)}
+.inst-row{display:flex;align-items:center;gap:8px;margin-top:20px;flex-wrap:wrap}
+.inst-lbl{font-size:11px;color:var(--muted);font-weight:600}
+.inst-badge{background:var(--papel-2);border:1px solid var(--linea);border-radius:6px;padding:3px 10px;font-size:11px;font-weight:700;color:var(--subsuelo);letter-spacing:.04em}
+
+/* ── RESUMEN FINAL ── */
+.resumen-sec{padding:0 0 48px}
+.resumen-card{background:var(--subsuelo);border-radius:20px;padding:40px 36px;position:relative;overflow:hidden}
+.resumen-card::before{content:"";position:absolute;top:-60px;right:-60px;width:280px;height:280px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.2),transparent 70%)}
+.resumen-card::after{content:"";position:absolute;bottom:-40px;left:40%;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(245,158,11,.1),transparent 70%)}
+.resumen-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:32px;position:relative;z-index:1;flex-wrap:wrap;gap:16px}
+.resumen-who{font-size:13px;color:rgba(200,211,232,.5);margin-bottom:4px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.resumen-nombre{font-size:24px;font-weight:800;color:#fff;min-height:32px}
+.resumen-tagline{font-size:13px;color:rgba(200,211,232,.45);margin-top:4px;font-style:italic}
+.resumen-mina{display:flex;align-items:center;gap:8px;opacity:.5}
+.resumen-mina img{width:20px;height:20px;filter:brightness(10)}
+.resumen-mina span{font-size:12px;font-weight:700;color:#fff;letter-spacing:.06em}
+.resumen-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;position:relative;z-index:1}
+.ritem{border-radius:12px;padding:16px 18px;border:1px solid rgba(255,255,255,.08)}
+.ritem.main{background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.3)}
+.ritem.reg{background:rgba(255,255,255,.05)}
+.ri-lbl{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px}
+.ritem.main .ri-lbl{color:rgba(245,158,11,.7)}
+.ritem.reg .ri-lbl{color:rgba(200,211,232,.4)}
+.ri-val{font-family:'IBM Plex Mono',monospace;font-size:26px;font-weight:600;line-height:1;margin-bottom:2px}
+.ritem.main .ri-val{color:#fff;font-size:32px}
+.ritem.reg .ri-val{color:rgba(200,211,232,.9)}
+.ri-desc{font-size:11px}
+.ritem.main .ri-desc{color:rgba(245,158,11,.6)}
+.ritem.reg .ri-desc{color:rgba(200,211,232,.35)}
+.resumen-footer{margin-top:24px;padding-top:20px;border-top:1px solid rgba(255,255,255,.07);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;position:relative;z-index:1}
+.resumen-footer p{font-size:13px;color:rgba(200,211,232,.5)}
+.resumen-footer strong{color:rgba(200,211,232,.8)}
+
+/* FOOTER */
+footer{padding:20px 0;border-top:1px solid var(--linea)}
+footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+footer span{font-size:11px;color:var(--muted)}
+
+/* RESPONSIVE */
+@media(max-width:880px){
+  .sliders{grid-template-columns:1fr 1fr}
+  .stats-inner{grid-template-columns:1fr 1fr}
+  .stats-inner .stat-item:nth-child(2)::after{display:none}
+  .mile-grid{grid-template-columns:1fr 1fr}
+  .esperar-grid{grid-template-columns:1fr 1fr}
+  .bono-inner{grid-template-columns:1fr}
+  .resumen-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:560px){
+  .sliders{grid-template-columns:1fr}
+  .stats-inner{grid-template-columns:1fr 1fr}
+  .stat-item{padding:18px 16px}
+  .stat-big{font-size:22px}
+  .hero h1{font-size:26px}
+  .name-input{width:100%}
+  .esperar-grid{grid-template-columns:1fr 1fr}
+  .esp{padding:14px 10px}
+  .esp-val{font-size:17px}
+  .chart-wrap{height:220px}
+  .mile-grid{grid-template-columns:1fr 1fr}
+  .mile{padding:16px 14px}
+  .mile-bg .mile-num{font-size:18px}
+  .mile-hi .mile-num{font-size:20px}
+  .bono-right{grid-template-columns:1fr 1fr 1fr}
+  .resumen-card{padding:28px 20px}
+  .resumen-grid{grid-template-columns:1fr 1fr}
+  .ritem.main .ri-val{font-size:24px}
+  .ri-val{font-size:20px}
+}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="index.html" class="brand"><img src="logo-symbol.svg" alt="MINA">MINA</a>
+    <a href="index.html" class="nav-back">← Inicio</a>
+  </div>
+</header>
+
+<!-- HERO: sliders -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-top">
+      <span class="kicker">Simulador Patrimonial</span>
+      <h1>Así crece<span class="name-inline" id="hero-name-inline"></span> tu patrimonio.</h1>
+      <p class="hero-sub">Mueve los controles — los números se actualizan en tiempo real.</p>
+    </div>
+
+    <div class="name-row">
+      <span class="name-label">Para</span>
+      <input class="name-input" id="nombre" type="text" placeholder="Nombre del cliente" autocomplete="off">
+    </div>
+
+    <div class="sliders">
+      <div class="slider-block">
+        <div class="sl-label">Aportación mensual</div>
+        <div class="sl-val">$<span id="val-mensual">2,000</span><em>MXN</em></div>
+        <input type="range" id="sl-mensual" min="1000" max="30000" step="500" value="2000">
+        <div class="sl-range"><span>$1,000</span><span>$30,000</span></div>
+      </div>
+      <div class="slider-block">
+        <div class="sl-label">Edad actual</div>
+        <div class="sl-val"><span id="val-edad">30</span><em>años</em></div>
+        <input type="range" id="sl-edad" min="20" max="55" step="1" value="30">
+        <div class="sl-range"><span>20</span><span>55</span></div>
+      </div>
+      <div class="slider-block">
+        <div class="sl-label">Gasto mensual actual</div>
+        <div class="sl-val">$<span id="val-gasto">15,000</span><em>MXN</em></div>
+        <input type="range" id="sl-gasto" min="5000" max="150000" step="1000" value="15000">
+        <div class="sl-range"><span>$5,000</span><span>$150,000</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="wrap" style="padding:0">
+    <div class="stats-inner">
+      <div class="stat-item">
+        <div class="stat-sl">Acumulado al retiro</div>
+        <div class="stat-big" id="s-total">—</div>
+        <div class="stat-desc">libre de impuestos a los 60</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-sl">Genera la inversión</div>
+        <div class="stat-big gold" id="s-rendimientos">—</div>
+        <div class="stat-desc">sobre lo que tú pusiste</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-sl">Lo que aportas tú</div>
+        <div class="stat-big" id="s-aportado">—</div>
+        <div class="stat-desc" id="s-aportado-sub">—</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-sl">Multiplicador</div>
+        <div class="stat-big gold" id="s-mult">—</div>
+        <div class="stat-desc">por cada peso que metes</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CHART -->
+<section class="chart-sec">
+  <div class="wrap">
+    <div class="chart-card">
+      <div class="chart-top">
+        <div>
+          <div class="chart-title">Curva patrimonial</div>
+          <div class="chart-sub" id="chart-name-label">Proyección personalizada</div>
+        </div>
+        <div class="tasa-badge">
+          <span>Rendimiento proyectado</span>
+          <span>12% anual</span>
+        </div>
+      </div>
+      <div class="phases">
+        <span class="phase-tag"><span class="phase-dot" style="background:#A5B4FC"></span>Acumulación</span>
+        <span class="phase-tag"><span class="phase-dot" style="background:var(--azul)"></span>Diversificación</span>
+        <span class="phase-tag"><span class="phase-dot" style="background:var(--oro)"></span>Desacumulación</span>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="curvaChart" role="img" aria-label="Curva patrimonial personalizada"></canvas>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MILESTONES -->
+<section class="miles-sec">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker">Puntos clave</span>
+    </div>
+    <div class="mile-grid" id="milestones"></div>
+  </div>
+</section>
+
+<!-- COSTO DE ESPERAR -->
+<section class="esperar-sec">
+  <div class="wrap">
+    <div class="esperar-card">
+      <div class="esperar-head">
+        <span class="kicker" style="color:var(--oro)"><span style="background:var(--oro)"></span>El costo de esperar</span>
+        <h2>Cada año que pasa,<br>el dinero que pierdes no regresa.</h2>
+        <p>No es lo que dejas de ganar — es lo que el tiempo hubiera hecho crecer por ti.</p>
+      </div>
+      <div class="esperar-grid" id="esperar-grid"></div>
+    </div>
+  </div>
+</section>
+
+<!-- BONO ALLIANZ -->
+<section class="bono-sec">
+  <div class="wrap">
+    <div class="bono-card">
+      <div class="bono-inner">
+        <div class="bono-left">
+          <span class="kicker">Ventaja Allianz</span>
+          <h3>Allianz te regala el 55% de tu primer año.</h3>
+          <p>Desde el primer año, Allianz deposita un bono de fidelidad sobre todo lo que aportaste los primeros 12 meses. Ese bono también genera intereses — y crece contigo hasta el retiro.</p>
+          <div class="inst-row">
+            <span class="inst-lbl">Regulado por</span>
+            <span class="inst-badge">Allianz</span>
+            <span class="inst-badge">CONDUSEF</span>
+            <span class="inst-badge">CNSF</span>
+            <span class="inst-badge">SHCP</span>
+          </div>
+        </div>
+        <div class="bono-right">
+          <div class="bono-item b1">
+            <div class="bono-lbl">Tu aportación año 1</div>
+            <div class="bono-val" id="b-ap1">—</div>
+            <div class="bono-desc">lo que tú pones</div>
+          </div>
+          <div class="bono-item b2">
+            <div class="bono-lbl" id="b-bono-pct">Bono Allianz · 55%</div>
+            <div class="bono-val" id="b-bono">—</div>
+            <div class="bono-desc">regalo del 55%</div>
+          </div>
+          <div class="bono-item b3">
+            <div class="bono-lbl">Total año 1</div>
+            <div class="bono-val" id="b-total1">—</div>
+            <div class="bono-desc">ya con bono + intereses</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESUMEN FINAL -->
+<section class="resumen-sec">
+  <div class="wrap">
+    <div class="resumen-card">
+      <div class="resumen-top">
+        <div>
+          <div class="resumen-who">Proyección personal</div>
+          <div class="resumen-nombre" id="r-nombre">Tu plan de inversión</div>
+          <div class="resumen-tagline">Tú produces el dinero. El tiempo hace el resto.</div>
+        </div>
+        <div class="resumen-mina">
+          <img src="logo-symbol.svg" alt="MINA">
+          <span>MINA × Allianz</span>
+        </div>
+      </div>
+      <div class="resumen-grid">
+        <div class="ritem main">
+          <div class="ri-lbl">Acumulado al retiro</div>
+          <div class="ri-val" id="r-total">—</div>
+          <div class="ri-desc">libre de impuestos a los 60 años</div>
+        </div>
+        <div class="ritem reg">
+          <div class="ri-lbl">Aportación mensual</div>
+          <div class="ri-val" id="r-mensual">—</div>
+          <div class="ri-desc">lo que sale de tu bolsillo cada mes</div>
+        </div>
+        <div class="ritem reg">
+          <div class="ri-lbl">Genera la inversión</div>
+          <div class="ri-val" id="r-rend">—</div>
+          <div class="ri-desc">rendimientos sobre lo que aportaste</div>
+        </div>
+        <div class="ritem reg">
+          <div class="ri-lbl">Multiplicador</div>
+          <div class="ri-val" id="r-mult">—</div>
+          <div class="ri-desc">por cada peso que entra</div>
+        </div>
+      </div>
+      <div class="resumen-footer">
+        <p>Fideicomiso regulado · <strong>Allianz · CONDUSEF · CNSF · SHCP</strong></p>
+        <p>Simulación ilustrativa. Rendimientos no garantizados.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span style="font-family:'IBM Plex Mono',monospace">MINA · Inteligencia Empresarial</span>
+    <span>© 2026</span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const TASA_MENSUAL = 0.12 / 12;
+const TASA_BONUS_M = 0.09 / 12;
+function getBono(mensual) {
+  if (mensual >= 7500) return 1.00;
+  if (mensual >= 5000) return 0.75;
+  if (mensual >= 3000) return 0.65;
+  return 0.55;
+}
+const PCT_BONO = 0.55; // fallback; usa getBono(mensual) en runtime
+const INFLACION = 0.06;
+const EDAD_RETIRO = 60;
+
+function fmt(n) {
+  if (n >= 1e6) return '$' + (n/1e6).toFixed(2).replace(/\.?0+$/, '') + 'M';
+  if (n >= 1e3) return '$' + (n/1e3).toFixed(0) + 'K';
+  return '$' + Math.round(n).toLocaleString('es-MX');
+}
+function fmtFull(n) {
+  return '$' + Math.round(n).toLocaleString('es-MX');
+}
+
+function calcular(mensual, edadActual) {
+  const anos = EDAD_RETIRO - edadActual;
+  const meses = anos * 12;
+  const labels = [], datos = [];
+  let saldo = 0, bonusAc = 0, bonusBase = 0, totalAp = 0;
+
+  for (let m = 1; m <= meses; m++) {
+    saldo = saldo * (1 + TASA_MENSUAL) + mensual;
+    totalAp += mensual;
+    if (m === 12) { bonusBase = totalAp * getBono(mensual); bonusAc = bonusBase; }
+    else if (m > 12) bonusAc *= (1 + TASA_BONUS_M);
+    if (m % 12 === 0) {
+      labels.push('Año ' + (m/12));
+      datos.push(Math.round(saldo + bonusAc));
+    }
+  }
+  return { labels, datos, totalAp, saldoFinal: datos.at(-1)||0, bonusBase, anos };
+}
+
+let chart = null;
+
+function buildChart(labels, datos) {
+  const ctx = document.getElementById('curvaChart').getContext('2d');
+  const M = 1_000_000;
+  const colors = datos.map(v =>
+    v < M ? 'rgba(99,120,210,.55)' : v < M*3.5 ? 'rgba(37,99,235,.8)' : 'rgba(245,158,11,.9)'
+  );
+  if (chart) {
+    chart.data.labels = labels;
+    chart.data.datasets[0].data = datos;
+    chart.data.datasets[0].backgroundColor = colors;
+    chart.update('active');
+    return;
+  }
+  chart = new Chart(ctx, {
+    type: 'bar',
+    data: { labels, datasets: [{ data: datos, backgroundColor: colors, borderRadius: 4, borderSkipped: false }] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      animation: { duration: 500, easing: 'easeInOutCubic' },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: { label: c => '  ' + fmtFull(c.raw), title: t => t[0].label },
+          backgroundColor: 'rgba(11,21,56,.96)', titleColor: 'rgba(200,211,232,.7)',
+          bodyColor: '#fff', bodyFont: { family: 'IBM Plex Mono', size: 13 },
+          padding: 14, cornerRadius: 10, displayColors: false
+        }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { color: '#9CA3AF', font: { size: 9 }, maxTicksLimit: 10, maxRotation: 0 } },
+        y: {
+          grid: { color: 'rgba(0,0,0,.04)' },
+          ticks: { color: '#9CA3AF', font: { size: 9, family: 'IBM Plex Mono' },
+            callback: v => v >= 1e6 ? '$'+(v/1e6).toFixed(1)+'M' : v >= 1e3 ? '$'+(v/1e3).toFixed(0)+'K' : '$'+v }
+        }
+      }
+    }
+  });
+}
+
+function render() {
+  const mensual = +document.getElementById('sl-mensual').value;
+  const edad = +document.getElementById('sl-edad').value;
+  const gasto = +document.getElementById('sl-gasto').value;
+  const nombre = document.getElementById('nombre').value.trim();
+
+  const r = calcular(mensual, edad);
+
+  buildChart(r.labels, r.datos);
+
+  // Hero nombre
+  const ni = document.getElementById('hero-name-inline');
+  ni.textContent = nombre ? ', ' + nombre.split(' ')[0] : '';
+
+  // Chart label
+  document.getElementById('chart-name-label').textContent =
+    nombre ? nombre : 'Proyección personalizada';
+
+  // Stats strip
+  const mult = (r.saldoFinal / r.totalAp);
+  document.getElementById('s-total').textContent = fmt(r.saldoFinal);
+  document.getElementById('s-rendimientos').textContent = fmt(r.saldoFinal - r.totalAp);
+  document.getElementById('s-aportado').textContent = fmt(r.totalAp);
+  document.getElementById('s-aportado-sub').textContent =
+    '$' + mensual.toLocaleString('es-MX') + '/mes × ' + r.anos + ' años';
+  document.getElementById('s-mult').textContent = 'x' + mult.toFixed(1);
+
+  // Milestones
+  const targets = [5, 10, 20, r.anos];
+  const labels2 = ['5 años', '10 años', '20 años', 'Al retiro · 60'];
+  const ml = document.getElementById('milestones');
+  ml.innerHTML = '';
+  targets.forEach((a, i) => {
+    const val = a <= r.datos.length ? r.datos[a-1] : null;
+    if (!val) return;
+    const ap = mensual * 12 * a;
+    const m2 = (val / ap).toFixed(1);
+    const hi = i === targets.length - 1;
+    ml.innerHTML += `
+      <div class="mile ${hi ? 'mile-hi' : 'mile-bg'}">
+        <div class="mile-yr">${labels2[i]}</div>
+        <div class="mile-num">${fmt(val)}</div>
+        <div class="mile-ap">aportado: ${fmt(ap)}</div>
+        ${hi ? `<div class="mile-mult">×${m2} tu dinero</div>` : ''}
+      </div>`;
+  });
+
+  // Bono Allianz
+  const pctBono = getBono(mensual);
+  const ap1 = mensual * 12;
+  const bono = ap1 * pctBono;
+  const total1 = r.datos[0] || 0;
+  document.getElementById('b-ap1').textContent = fmt(ap1);
+  document.getElementById('b-bono').textContent = fmt(bono);
+  document.getElementById('b-bono-pct').textContent = 'Bono Allianz · ' + Math.round(pctBono*100) + '%';
+  document.getElementById('b-total1').textContent = fmt(total1);
+
+  // Resumen final
+  document.getElementById('r-nombre').textContent = nombre || 'Tu plan de inversión';
+  document.getElementById('r-total').textContent = fmt(r.saldoFinal);
+  document.getElementById('r-mensual').textContent = '$' + mensual.toLocaleString('es-MX');
+  document.getElementById('r-rend').textContent = fmt(r.saldoFinal - r.totalAp);
+  document.getElementById('r-mult').textContent = 'x' + (r.saldoFinal / r.totalAp).toFixed(1);
+
+  // Costo de esperar
+  const ahora = r.saldoFinal;
+  const eg = document.getElementById('esperar-grid');
+  eg.innerHTML = '';
+  [{d:0,cls:'now',tag:'Empiezas hoy'},{d:1,cls:'d1',tag:'Esperas 1 año'},{d:2,cls:'d2',tag:'Esperas 2 años'},{d:3,cls:'d3',tag:'Esperas 3 años'}]
+    .forEach(({d, cls, tag}) => {
+      const val = d === 0 ? ahora : calcular(mensual, edad + d).saldoFinal;
+      const diff = ahora - val;
+      eg.innerHTML += `
+        <div class="esp ${cls}">
+          <div class="esp-tag">${tag}</div>
+          <div class="esp-val">${fmt(val)}</div>
+          <div class="esp-loss">${d === 0 ? 'tu máximo' : '− ' + fmt(diff)}</div>
+        </div>`;
+    });
+}
+
+// Bind sliders
+[['sl-mensual','val-mensual', v => v.toLocaleString('es-MX')],
+ ['sl-edad','val-edad', v => v],
+ ['sl-gasto','val-gasto', v => v.toLocaleString('es-MX')]
+].forEach(([id, did, fn]) => {
+  document.getElementById(id).addEventListener('input', e => {
+    document.getElementById(did).textContent = fn(+e.target.value);
+    render();
+  });
+});
+document.getElementById('nombre').addEventListener('input', render);
+
+render();
+</script>
+</body>
+</html>

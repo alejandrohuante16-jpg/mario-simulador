@@ -1,0 +1,9 @@
+<svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Símbolo MINA</title>
+  <desc id="desc">Círculo azul con diamante dorado al centro, símbolo de valor oculto encontrado.</desc>
+  <circle cx="80" cy="80" r="80" fill="#1A40B8"/>
+  <path d="M33 80C45 61 62 52 80 52C98 52 115 61 127 80C115 99 98 108 80 108C62 108 45 99 33 80Z" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity=".16"/>
+  <path d="M80 50L107 77L80 110L53 77L80 50Z" fill="#F59E0B"/>
+  <path d="M80 50L107 77H53L80 50Z" fill="#FFB22E"/>
+  <path d="M80 110L66 77H94L80 110Z" fill="#C77908" opacity=".34"/>
+</svg>
