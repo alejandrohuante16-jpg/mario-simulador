@@ -3,999 +3,1173 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Simulador Patrimonial · MINA</title>
-<meta name="description" content="Descubre cuánto puede crecer tu patrimonio con una estrategia de inversión estructurada. Proyección personalizada en tiempo real.">
+<title>Simulador Patrimonial</title>
 <link rel="icon" href="logo-symbol.svg">
-<link rel="stylesheet" href="theme.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:'Manrope',system-ui,sans-serif;color:var(--texto);background:var(--papel);line-height:1.6;-webkit-font-smoothing:antialiased}
-h1,h2,h3{font-family:'Manrope',sans-serif;font-weight:700;letter-spacing:-.02em;line-height:1.15}
-a{color:inherit;text-decoration:none}
-.wrap{max-width:1100px;margin:0 auto;padding:0 28px}
-.kicker{display:inline-flex;align-items:center;gap:8px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--cobalto);font-weight:600}
-.kicker::before{content:"";width:7px;height:7px;background:var(--oro);transform:rotate(45deg);flex:0 0 auto}
-
-/* NAV */
-header.nav{position:sticky;top:0;z-index:100;background:rgba(11,21,56,.97);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.07)}
-.nav .wrap{display:flex;align-items:center;justify-content:space-between;padding-top:14px;padding-bottom:14px}
-.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;color:#fff}
-.brand img{width:26px;height:26px}
-.nav-cta{font-size:13px;font-weight:600;background:var(--oro);color:var(--subsuelo);padding:8px 16px;border-radius:8px;transition:opacity .15s}
-.nav-cta:hover{opacity:.88}
-
-/* HOOK */
-.hook{background:var(--subsuelo);padding:80px 0 72px;position:relative;overflow:hidden;text-align:center}
-.hook::before{content:"";position:absolute;top:-200px;left:50%;transform:translateX(-50%);width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.18),transparent 68%);pointer-events:none}
-.hook::after{content:"";position:absolute;bottom:-80px;right:-60px;width:380px;height:380px;border-radius:50%;background:radial-gradient(circle,rgba(245,158,11,.09),transparent 65%);pointer-events:none}
-.hook .wrap{position:relative;z-index:1;max-width:760px}
-.hook-kicker{margin-bottom:20px}
-.hook h1{color:#fff;font-size:clamp(30px,5vw,56px);font-weight:800;margin-bottom:18px;line-height:1.08}
-.hook h1 em{font-style:normal;color:var(--oro)}
-.hook-sub{color:rgba(200,211,232,.65);font-size:clamp(15px,2vw,18px);max-width:560px;margin:0 auto 36px}
-.hook-scroll{display:inline-flex;align-items:center;gap:10px;background:var(--azul);color:#fff;font-weight:700;font-size:15px;padding:14px 28px;border-radius:12px;transition:background .15s,transform .15s}
-.hook-scroll:hover{background:#1d4ed8;transform:translateY(-1px)}
-.hook-scroll svg{transition:transform .2s}
-.hook-scroll:hover svg{transform:translateY(3px)}
-.hook-trust{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:28px;flex-wrap:wrap}
-.hook-trust span{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(200,211,232,.3)}
-.hook-trust strong{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(200,211,232,.45)}
-
-/* PROBLEMA */
-.problema{background:var(--papel);padding:64px 0}
-.prob-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;margin-top:32px}
-.prob-card{border:1px solid var(--linea);border-radius:16px;padding:28px 24px}
-.prob-num{font-family:'IBM Plex Mono',monospace;font-size:36px;font-weight:700;color:var(--fuga);line-height:1;margin-bottom:8px}
-.prob-label{font-size:14px;font-weight:700;color:var(--subsuelo);margin-bottom:6px}
-.prob-desc{font-size:13px;color:var(--muted);line-height:1.55}
-.prob-isr-note{display:inline-block;margin-top:8px;font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--azul);background:rgba(37,99,235,.07);border-radius:5px;padding:3px 8px;line-height:1.5}
-.prob-bottom{margin-top:28px;padding:22px 28px;background:var(--subsuelo);border-radius:14px;display:flex;align-items:center;gap:20px}
-.prob-bottom-icon{flex:0 0 auto}
-.prob-bottom p{color:rgba(200,211,232,.75);font-size:15px;line-height:1.5}
-.prob-bottom strong{color:#fff}
-
-/* SECTION BREAK — AHORRO */
-.sec-ahorro{background:var(--papel);padding:48px 0 0;border-top:3px solid var(--azul)}
-.sec-ahorro-head h2{font-size:clamp(22px,3vw,34px);color:var(--subsuelo);margin:10px 0 8px}
-.sec-ahorro-head p{color:var(--muted);font-size:15px;max-width:560px;line-height:1.6}
-.product-tag{display:inline-flex;align-items:center;gap:6px;margin-top:12px;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:rgba(37,99,235,.07);border:1px solid rgba(37,99,235,.15);color:var(--azul);border-radius:6px;padding:4px 10px}
-
-/* SIMULADOR */
-.sim-hero{background:var(--subsuelo);padding:52px 0 0;position:relative;overflow:hidden}
-.sim-hero::before{content:"";position:absolute;top:-120px;right:-80px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.14),transparent 70%);pointer-events:none}
-.sim-hero .wrap{position:relative;z-index:1}
-.sim-hero-top{margin-bottom:32px}
-.sim-hero h2{color:#fff;font-size:clamp(22px,3.5vw,38px);margin:10px 0 6px;font-weight:800}
-.sim-hero h2 .name-inline{color:var(--oro)}
-.sim-hero-sub{color:rgba(200,211,232,.6);font-size:15px}
-.name-row{display:flex;align-items:center;gap:12px;margin-bottom:28px;flex-wrap:wrap}
-.name-label{font-size:12px;font-weight:600;color:rgba(255,255,255,.4);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
-.name-input{background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.12);border-radius:10px;padding:10px 16px;font-family:'Manrope',sans-serif;font-size:16px;font-weight:700;color:#fff;width:260px;outline:none;transition:border .2s}
-.name-input::placeholder{color:rgba(255,255,255,.2);font-weight:400}
-.name-input:focus{border-color:rgba(245,158,11,.55);background:rgba(255,255,255,.1)}
-.sliders{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.slider-block{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:18px 20px}
-.sl-label{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(200,211,232,.5);margin-bottom:2px}
-.sl-val{font-family:'IBM Plex Mono',monospace;font-size:28px;font-weight:600;color:#fff;margin-bottom:14px;line-height:1}
-.sl-val em{font-size:13px;color:rgba(200,211,232,.4);font-style:normal;margin-left:4px;font-weight:400}
-input[type=range]{-webkit-appearance:none;width:100%;height:3px;border-radius:2px;background:rgba(255,255,255,.12);outline:none;cursor:pointer}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--oro);cursor:pointer;box-shadow:0 0 0 4px rgba(245,158,11,.18),0 2px 8px rgba(0,0,0,.3);transition:transform .15s}
-input[type=range]::-webkit-slider-thumb:hover{transform:scale(1.15)}
-.sl-range{display:flex;justify-content:space-between;font-size:9px;color:rgba(200,211,232,.25);margin-top:8px;font-family:'IBM Plex Mono',monospace}
-.sl-note{font-size:10px;color:rgba(200,211,232,.3);margin-top:6px;line-height:1.4}
-
-/* STATS STRIP */
-.stats-strip{background:var(--subsuelo);border-top:1px solid rgba(255,255,255,.07);padding:0}
-.stats-inner{display:grid;grid-template-columns:repeat(4,1fr)}
-.stat-item{padding:24px 28px;position:relative}
-.stat-item:not(:last-child)::after{content:"";position:absolute;right:0;top:20%;height:60%;width:1px;background:rgba(255,255,255,.08)}
-.stat-sl{font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(200,211,232,.45);margin-bottom:4px}
-.stat-big{font-family:'IBM Plex Mono',monospace;font-size:clamp(22px,2.5vw,32px);font-weight:600;color:#fff;line-height:1;margin-bottom:3px;transition:color .3s}
-.stat-big.gold{color:var(--oro)}
-.stat-desc{font-size:12px;color:rgba(200,211,232,.45)}
-
-/* CHART */
-.chart-sec{background:var(--papel);padding:32px 0 28px}
-.chart-card{background:#fff;border:1px solid var(--linea);border-radius:18px;padding:28px 28px 20px;box-shadow:0 8px 40px rgba(11,21,56,.08)}
-.chart-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;flex-wrap:wrap;gap:8px}
-.chart-title{font-size:18px;font-weight:700;color:var(--subsuelo)}
-.chart-sub{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--muted);margin-top:2px}
-.tasa-badge{display:flex;flex-direction:column;align-items:flex-end}
-.tasa-badge span:first-child{font-size:10px;color:var(--muted)}
-.tasa-badge span:last-child{font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:700;color:var(--azul)}
-.tasa-badge small{font-size:9px;color:var(--muted);display:block;text-align:right;margin-top:1px}
-.phases{display:flex;gap:18px;margin:10px 0 18px;flex-wrap:wrap}
-.phase-tag{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center;gap:5px;color:var(--muted)}
-.phase-dot{width:8px;height:8px;border-radius:50%;flex:0 0 auto}
-.chart-wrap{height:280px}
-.chart-disclaimer{font-size:11px;color:var(--muted);margin-top:12px;line-height:1.5;padding-top:12px;border-top:1px solid var(--linea)}
-
-/* INFLACIÓN */
-.inflacion-sec{background:var(--papel);padding:0 0 32px}
-.inflacion-card{background:#fff;border:1px solid var(--linea);border-radius:16px;padding:24px 28px;box-shadow:0 4px 20px rgba(11,21,56,.05)}
-.infl-top{margin-bottom:20px}
-.infl-top p{font-size:15px;color:var(--subsuelo);font-weight:500;line-height:1.5}
-.infl-top p span{font-family:'IBM Plex Mono',monospace;color:var(--azul)}
-.infl-row{display:grid;grid-template-columns:1fr 28px 1fr 28px 1fr;align-items:center;gap:8px;margin-bottom:16px}
-.infl-item{text-align:center;padding:16px 12px;border-radius:12px}
-.infl-item.now{background:var(--papel);border:1px solid var(--linea)}
-.infl-item.mid{background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.18)}
-.infl-item.far{background:var(--subsuelo)}
-.infl-lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
-.infl-item.far .infl-lbl{color:rgba(200,211,232,.4)}
-.infl-val{font-family:'IBM Plex Mono',monospace;font-size:20px;font-weight:700;color:var(--subsuelo)}
-.infl-item.mid .infl-val{color:#92400E}
-.infl-item.far .infl-val{color:var(--oro);font-size:24px}
-.infl-arrow{text-align:center;color:var(--linea);font-size:18px;font-weight:300}
-.infl-note{font-size:12px;color:var(--muted);line-height:1.55}
-.infl-note strong{color:var(--subsuelo)}
-
-/* MILESTONES */
-.miles-sec{background:var(--papel);padding:0 0 32px}
-.mile-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.mile{border-radius:14px;padding:18px;border:1px solid var(--linea);background:var(--papel-2);transition:transform .15s}
-.mile:hover{transform:translateY(-2px)}
-.mile-hi{background:var(--subsuelo);border-color:var(--subsuelo)}
-.mile-yr{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
-.mile-hi .mile-yr{color:rgba(200,211,232,.4)}
-.mile-num{font-family:'IBM Plex Mono',monospace;font-size:20px;font-weight:600;color:var(--subsuelo);margin-bottom:3px}
-.mile-hi .mile-num{color:#fff;font-size:22px}
-.mile-ap{font-size:11px;color:var(--muted)}
-.mile-hi .mile-ap{color:rgba(200,211,232,.35)}
-.mile-mult{font-size:11px;font-weight:700;color:var(--oro);margin-top:4px}
-
-/* COSTO DE ESPERAR */
-.esperar-sec{background:var(--papel);padding:0 0 40px}
-.esperar-card{background:var(--subsuelo);border-radius:18px;padding:32px}
-.esperar-head{margin-bottom:24px}
-.esperar-head h3{font-size:clamp(18px,2.5vw,26px);color:#fff;margin:6px 0 8px}
-.esperar-head p{font-size:14px;color:rgba(200,211,232,.5)}
-.esperar-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.esp{border-radius:12px;padding:16px 14px}
-.esp.now{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.22)}
-.esp.d1,.esp.d2,.esp.d3{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
-.esp-tag{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:8px}
-.now .esp-tag{color:var(--oro)}
-.d1 .esp-tag,.d2 .esp-tag,.d3 .esp-tag{color:rgba(200,211,232,.35)}
-.esp-val{font-family:'IBM Plex Mono',monospace;font-size:20px;font-weight:600;margin-bottom:4px}
-.now .esp-val{color:#fff}
-.d1 .esp-val,.d2 .esp-val,.d3 .esp-val{color:rgba(200,211,232,.55)}
-.esp-loss{font-size:12px;font-weight:700}
-.now .esp-loss{color:rgba(200,211,232,.35)}
-.d1 .esp-loss,.d2 .esp-loss,.d3 .esp-loss{color:#F87171}
-
-/* CÓMO FUNCIONA */
-.como{background:var(--papel);padding:64px 0}
-.como-head{text-align:center;margin-bottom:40px}
-.como-head h2{font-size:clamp(22px,3vw,34px);color:var(--subsuelo);margin:10px 0 10px}
-.como-head p{color:var(--muted);font-size:15px;max-width:440px;margin:0 auto}
-.como-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;position:relative}
-.como-steps::before{content:"";position:absolute;top:36px;left:calc(16.66% + 16px);right:calc(16.66% + 16px);height:1px;background:linear-gradient(90deg,var(--linea),var(--azul),var(--linea));z-index:0}
-.como-step{text-align:center;padding:0 24px;position:relative;z-index:1}
-.step-num{width:48px;height:48px;border-radius:50%;background:var(--azul);color:#fff;font-family:'IBM Plex Mono',monospace;font-size:18px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
-.step-title{font-size:16px;font-weight:700;color:var(--subsuelo);margin-bottom:8px}
-.step-desc{font-size:14px;color:var(--muted);line-height:1.55}
-.step-highlight{display:inline-block;margin-top:8px;font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:var(--azul);background:rgba(37,99,235,.06);border-radius:6px;padding:4px 10px}
-.step-note{display:block;margin-top:8px;font-size:11px;color:var(--muted);line-height:1.5}
-
-/* VENTAJAS */
-.ventajas{background:var(--papel-2);padding:64px 0}
-.ventajas-head{text-align:center;margin-bottom:36px}
-.ventajas-head h2{font-size:clamp(22px,3vw,32px);color:var(--subsuelo);margin:10px 0 10px}
-.ventajas-head p{color:var(--muted);font-size:15px}
-.ventajas-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.vent{background:#fff;border:1px solid var(--linea);border-radius:16px;padding:24px 20px}
-.vent-icon{margin-bottom:14px;color:var(--azul)}
-.vent-hi .vent-icon{color:var(--oro)}
-.vent-title{font-size:15px;font-weight:700;color:var(--subsuelo);margin-bottom:6px}
-.vent-desc{font-size:13px;color:var(--muted);line-height:1.55}
-.vent-hi{border-color:var(--azul);background:var(--subsuelo)}
-.vent-hi .vent-title{color:#fff}
-.vent-hi .vent-desc{color:rgba(200,211,232,.6)}
-.vent-tag{display:inline-block;margin-top:10px;font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--oro);background:rgba(245,158,11,.1);border-radius:5px;padding:3px 8px}
-
-/* BONO */
-.bono-sec{background:var(--papel);padding:0 0 64px}
-.bono-card{background:#fff;border:1px solid var(--linea);border-radius:18px;padding:32px;box-shadow:0 4px 20px rgba(11,21,56,.06)}
-.bono-inner{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:center}
-.bono-left h3{font-size:22px;color:var(--subsuelo);margin:10px 0 10px}
-.bono-left p{font-size:14px;color:var(--muted);line-height:1.65;max-width:380px}
-.bono-note{margin-top:12px;font-size:12px;color:var(--muted);line-height:1.55;padding:10px 14px;background:var(--papel);border-radius:8px;border-left:3px solid var(--linea)}
-.bono-table{margin-top:16px;border:1px solid var(--linea);border-radius:10px;overflow:hidden}
-.bono-tr{display:grid;grid-template-columns:1fr 1fr;font-size:13px}
-.bono-tr:not(:last-child){border-bottom:1px solid var(--linea)}
-.bono-td{padding:10px 14px;font-family:'IBM Plex Mono',monospace;white-space:nowrap}
-.bono-tr:first-child .bono-td{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:var(--papel-2)}
-.bono-tr .bono-td:last-child{font-weight:700;color:var(--azul)}
-.bono-tr.hi{background:rgba(37,99,235,.04)}
-.bono-tr.hi .bono-td:last-child{color:var(--subsuelo)}
-.bono-right{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.bono-item{border-radius:14px;padding:20px;text-align:center}
-.bono-item.b1{background:var(--subsuelo);grid-column:1/-1}
-.bono-item.b2{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.2)}
-.bono-item.b3{background:var(--papel-2);border:1px solid var(--linea)}
-.bono-lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
-.b1 .bono-lbl{color:rgba(200,211,232,.45)}
-.b2 .bono-lbl{color:var(--oro-oscuro)}
-.b3 .bono-lbl{color:var(--muted)}
-.bono-val{font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:700;line-height:1}
-.b1 .bono-val{color:#fff}
-.b2 .bono-val{color:var(--oro-oscuro);font-size:28px}
-.b3 .bono-val{color:var(--azul)}
-.bono-desc{font-size:11px;margin-top:4px}
-.b1 .bono-desc{color:rgba(200,211,232,.4)}
-.b2 .bono-desc{color:rgba(180,120,0,.65)}
-.b3 .bono-desc{color:var(--muted)}
-
-/* RESUMEN */
-.resumen-sec{background:var(--papel);padding:0 0 64px}
-.resumen-card{background:var(--subsuelo);border-radius:20px;padding:36px;position:relative;overflow:hidden}
-.resumen-card::before{content:"";position:absolute;top:-80px;right:-80px;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(245,158,11,.08),transparent 65%);pointer-events:none}
-.resumen-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;flex-wrap:wrap;gap:12px}
-.resumen-who{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(200,211,232,.35);margin-bottom:4px}
-.resumen-nombre{font-size:clamp(18px,2.5vw,26px);font-weight:800;color:#fff;letter-spacing:-.02em}
-.resumen-tagline{font-size:13px;color:rgba(200,211,232,.4);margin-top:4px}
-.resumen-mina{display:flex;align-items:center;gap:8px;color:rgba(200,211,232,.35);font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600}
-.resumen-mina img{width:22px;height:22px;opacity:.5}
-.resumen-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:12px;position:relative;z-index:1}
-.ritem{border-radius:12px;padding:18px}
-.ritem.main{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2)}
-.ritem.reg{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
-.ri-lbl{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(200,211,232,.38);margin-bottom:6px}
-.ri-val{font-family:'IBM Plex Mono',monospace;font-size:clamp(18px,2.2vw,24px);font-weight:700;color:#fff;line-height:1;margin-bottom:4px}
-.ritem.main .ri-val{color:var(--oro);font-size:clamp(22px,2.8vw,30px)}
-.ri-desc{font-size:11px;color:rgba(200,211,232,.3)}
-.resumen-footer{margin-top:20px;padding-top:18px;border-top:1px solid rgba(255,255,255,.07);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
-.resumen-footer p{font-size:11px;color:rgba(200,211,232,.25)}
-
-/* SECTION BREAK — PATRIMONIAL */
-.sec-patrimonial{background:var(--subsuelo);padding:64px 0 0;position:relative;overflow:hidden}
-.sec-patrimonial::before{content:"";position:absolute;top:-150px;right:-100px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(245,158,11,.08),transparent 65%);pointer-events:none}
-.sec-patrimonial .wrap{position:relative;z-index:1}
-.sec-patrimonial .kicker{color:var(--oro)}
-.sec-patrimonial .kicker::before{background:var(--oro)}
-.sec-patrimonial h2{color:#fff;font-size:clamp(22px,3vw,34px);margin:10px 0 10px}
-.sec-patrimonial p.lead{color:rgba(200,211,232,.65);font-size:15px;max-width:580px;line-height:1.65}
-.pat-products{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:36px}
-.pat-card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:28px}
-.pat-badge{font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--oro);background:rgba(245,158,11,.12);border-radius:4px;padding:3px 8px;display:inline-block;margin-bottom:12px}
-.pat-name{font-size:15px;font-weight:700;color:#fff;margin-bottom:8px}
-.pat-desc{font-size:13px;color:rgba(200,211,232,.6);line-height:1.6;margin-bottom:16px}
-.pat-stats{display:flex;gap:16px;flex-wrap:wrap}
-.pat-stat{font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(200,211,232,.45)}
-.pat-stat strong{color:rgba(200,211,232,.8);display:block;font-size:14px;margin-bottom:2px}
-
-/* PRUEBA REAL (en sección patrimonial) */
-.prueba{background:var(--subsuelo);padding:40px 0 64px;border-top:1px solid rgba(255,255,255,.07)}
-.prueba-head{margin-bottom:32px}
-.prueba-head h3{color:#fff;font-size:clamp(20px,2.5vw,28px);margin:10px 0 8px}
-.prueba-head p{color:rgba(200,211,232,.5);font-size:14px;max-width:520px;line-height:1.6}
-.prueba-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
-.prueba-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:28px}
-.prueba-period{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(200,211,232,.35);margin-bottom:16px}
-.prueba-row{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap}
-.prueba-lbl{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(200,211,232,.38);margin-bottom:4px}
-.prueba-val{font-family:'IBM Plex Mono',monospace;font-size:28px;font-weight:700;color:#fff;line-height:1}
-.prueba-val.green{color:#4ade80}
-.prueba-gain{display:inline-flex;align-items:center;gap:6px;background:rgba(74,222,128,.12);border:1px solid rgba(74,222,128,.2);border-radius:8px;padding:6px 12px;margin-top:12px}
-.prueba-gain span{font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:700;color:#4ade80}
-.prueba-gain small{font-size:11px;color:rgba(200,211,232,.45)}
-.prueba-disclaimer{font-size:11px;color:rgba(200,211,232,.3);line-height:1.6;padding:14px 18px;background:rgba(255,255,255,.04);border-radius:8px;border:1px solid rgba(255,255,255,.07)}
-
-/* CTA FINAL */
-.cta-final{background:var(--subsuelo);padding:80px 0;position:relative;overflow:hidden;text-align:center;border-top:1px solid rgba(255,255,255,.07)}
-.cta-final::before{content:"";position:absolute;top:-150px;left:50%;transform:translateX(-50%);width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.2),transparent 65%);pointer-events:none}
-.cta-final .wrap{position:relative;z-index:1}
-.cta-final h2{color:#fff;font-size:clamp(26px,4vw,44px);margin:12px 0 14px;max-width:640px;margin-left:auto;margin-right:auto}
-.cta-final p{color:rgba(200,211,232,.6);font-size:16px;max-width:480px;margin:0 auto 36px}
-.cta-btns{display:flex;justify-content:center;gap:14px;flex-wrap:wrap}
-.btn-sec{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.12);border:1.5px solid rgba(255,255,255,.25);color:#fff;font-weight:700;font-size:16px;padding:16px 32px;border-radius:12px;transition:background .15s}
-.btn-sec:hover{background:rgba(255,255,255,.18)}
-.cta-trust{display:flex;justify-content:center;align-items:center;gap:20px;margin-top:28px;flex-wrap:wrap}
-.cta-trust span{font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:rgba(200,211,232,.3)}
-
-/* FOOTER */
-footer{background:var(--subsuelo);border-top:1px solid rgba(255,255,255,.06);padding:24px 0}
-footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
-footer span{font-size:12px;color:rgba(200,211,232,.25)}
-footer .foot-brand{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:rgba(200,211,232,.4)}
-
-/* RESPONSIVE */
-@media(max-width:900px){
-  .prob-grid{grid-template-columns:1fr 1fr}
-  .como-steps{grid-template-columns:1fr}
-  .como-steps::before{display:none}
-  .ventajas-grid{grid-template-columns:1fr 1fr}
-  .bono-inner{grid-template-columns:1fr}
-  .resumen-grid{grid-template-columns:1fr 1fr}
-  .prueba-grid{grid-template-columns:1fr}
-  .pat-products{grid-template-columns:1fr}
+:root{
+  --navy:#0B1538;
+  --azul:#1A40B8;
+  --oro:#F59E0B;
+  --papel:#F7F5F1;
+  --blanco:#ffffff;
+  --gris1:rgba(200,211,232,.55);
+  --gris2:rgba(200,211,232,.25);
+  --rojo:#DC2626;
+  --verde:#059669;
+  --borde:rgba(255,255,255,.08);
 }
-@media(max-width:700px){
-  .sliders{grid-template-columns:1fr}
-  .stats-inner{grid-template-columns:1fr 1fr}
-  .mile-grid{grid-template-columns:1fr 1fr}
-  .esperar-grid{grid-template-columns:1fr 1fr}
-  .prob-grid{grid-template-columns:1fr}
-  .ventajas-grid{grid-template-columns:1fr}
-  .bono-right{grid-template-columns:1fr}
-  .bono-item.b1{grid-column:auto}
-  .resumen-grid{grid-template-columns:1fr}
-  .hook h1{font-size:28px}
-  .stat-item{padding:18px 16px}
-  .infl-row{grid-template-columns:1fr;gap:4px}
-  .infl-arrow{transform:rotate(90deg)}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Manrope',system-ui,sans-serif;background:var(--navy);color:#fff;-webkit-font-smoothing:antialiased}
+
+/* ──────────────────────────────────────────────
+   PANTALLAS / SCREENS
+────────────────────────────────────────────── */
+.screen{
+  position:fixed;inset:0;
+  display:flex;flex-direction:column;
+  opacity:0;pointer-events:none;
+  transition:opacity .5s ease;
+  overflow-y:auto;
+}
+.screen.active{opacity:1;pointer-events:all}
+
+/* ──────────────────────────────────────────────
+   GANCHO — PANTALLA 0
+────────────────────────────────────────────── */
+#s-gancho{
+  background:var(--navy);
+  align-items:center;justify-content:center;
+  text-align:center;
+  position:relative;overflow:hidden;
+}
+.gancho-glow{
+  position:absolute;top:-20%;left:50%;transform:translateX(-50%);
+  width:900px;height:900px;border-radius:50%;
+  background:radial-gradient(circle,rgba(26,64,184,.28) 0%,transparent 65%);
+  pointer-events:none;
+}
+.gancho-glow2{
+  position:absolute;bottom:-30%;right:-10%;
+  width:500px;height:500px;border-radius:50%;
+  background:radial-gradient(circle,rgba(245,158,11,.12) 0%,transparent 65%);
+  pointer-events:none;
+}
+.gancho-inner{position:relative;z-index:1;max-width:780px;padding:40px 32px}
+
+.g-pretitulo{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--oro);margin-bottom:28px;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+}
+.g-pretitulo::before,.g-pretitulo::after{
+  content:"";display:block;width:28px;height:1px;background:var(--oro);opacity:.4;
+}
+
+.g-titulo{
+  font-size:clamp(36px,5.5vw,68px);
+  font-weight:800;line-height:1.05;
+  letter-spacing:-.03em;
+  color:#fff;
+  margin-bottom:18px;
+}
+.g-titulo em{font-style:normal;color:var(--oro)}
+
+/* Número de pérdida animado */
+.g-perdida-wrap{
+  margin:36px auto 32px;
+  padding:28px 40px;
+  background:rgba(220,38,38,.08);
+  border:1px solid rgba(220,38,38,.25);
+  border-radius:20px;
+  max-width:560px;
+}
+.g-perdida-label{
+  font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  color:rgba(220,38,38,.7);margin-bottom:10px;
+}
+.g-perdida-num{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:clamp(42px,7vw,84px);
+  font-weight:600;
+  color:#F87171;
+  line-height:1;
+  letter-spacing:-.02em;
+}
+.g-perdida-sub{
+  font-size:13px;color:rgba(200,211,232,.5);margin-top:8px;
+}
+
+.g-sub{
+  font-size:clamp(15px,2vw,19px);
+  color:var(--gris1);
+  line-height:1.6;
+  max-width:560px;
+  margin:0 auto 40px;
+}
+.g-sub strong{color:#fff;font-weight:700}
+
+.g-btn{
+  display:inline-flex;align-items:center;gap:12px;
+  background:var(--oro);color:var(--navy);
+  font-weight:800;font-size:16px;
+  padding:16px 36px;border-radius:14px;
+  border:none;cursor:pointer;
+  transition:transform .15s,box-shadow .15s;
+  letter-spacing:-.01em;
+}
+.g-btn:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(245,158,11,.35)}
+.g-btn svg{transition:transform .2s}
+.g-btn:hover svg{transform:translateX(4px)}
+
+.g-trust{
+  display:flex;align-items:center;justify-content:center;gap:24px;
+  margin-top:32px;flex-wrap:wrap;
+}
+.g-trust-item{
+  font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--gris2);
+}
+
+/* ──────────────────────────────────────────────
+   ACTO 1 — DIAGNÓSTICO
+────────────────────────────────────────────── */
+#s-acto1{
+  background:var(--papel);color:var(--navy);
+  overflow-y:auto;
+}
+.a1-layout{
+  display:grid;grid-template-columns:1fr 1fr;
+  min-height:100vh;
+}
+
+/* Panel izquierdo — inputs */
+.a1-left{
+  background:var(--navy);
+  padding:52px 48px;
+  display:flex;flex-direction:column;
+  justify-content:center;
+  position:sticky;top:0;height:100vh;
+}
+.a1-step-label{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--oro);margin-bottom:32px;
+  display:flex;align-items:center;gap:10px;
+}
+.a1-step-label::before{
+  content:"";width:18px;height:1px;background:var(--oro);
+}
+
+.a1-pregunta{
+  font-size:clamp(22px,2.8vw,32px);
+  font-weight:700;color:#fff;
+  line-height:1.25;margin-bottom:40px;
+  letter-spacing:-.02em;
+}
+.a1-pregunta em{font-style:normal;color:var(--oro)}
+
+.a1-inputs{display:flex;flex-direction:column;gap:28px}
+
+.inp-group{}
+.inp-label{
+  font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--gris1);margin-bottom:8px;display:block;
+}
+.inp-row{display:flex;align-items:center;gap:14px}
+.inp-prefix{
+  font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:600;
+  color:rgba(255,255,255,.3);
+}
+.inp-num{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:clamp(32px,4vw,48px);font-weight:600;
+  color:#fff;width:100%;
+  background:none;border:none;outline:none;
+  border-bottom:2px solid rgba(255,255,255,.12);
+  padding-bottom:8px;
+  transition:border-color .2s;
+}
+.inp-num:focus{border-bottom-color:var(--oro)}
+.inp-num::placeholder{color:rgba(255,255,255,.15)}
+
+/* slider */
+.sl-wrap{margin-top:10px}
+input[type=range]{
+  -webkit-appearance:none;width:100%;height:4px;
+  background:rgba(255,255,255,.1);border-radius:2px;outline:none;cursor:pointer;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:20px;height:20px;border-radius:50%;
+  background:var(--oro);cursor:pointer;
+  box-shadow:0 0 0 4px rgba(245,158,11,.2);
+  transition:box-shadow .15s;
+}
+input[type=range]:hover::-webkit-slider-thumb{box-shadow:0 0 0 6px rgba(245,158,11,.25)}
+.sl-range{display:flex;justify-content:space-between;margin-top:6px}
+.sl-range span{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--gris2)}
+
+.a1-cta{
+  margin-top:44px;
+  background:var(--oro);color:var(--navy);
+  font-weight:800;font-size:15px;
+  padding:16px 32px;border-radius:12px;
+  border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  transition:transform .15s,opacity .15s;
+  opacity:.4;pointer-events:none;
+}
+.a1-cta.ready{opacity:1;pointer-events:all}
+.a1-cta.ready:hover{transform:translateY(-2px)}
+
+/* Panel derecho — diagnóstico en vivo */
+.a1-right{
+  padding:52px 48px;
+  display:flex;flex-direction:column;
+  justify-content:center;gap:24px;
+}
+.diag-title{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(11,21,56,.4);margin-bottom:4px;
+}
+.diag-card{
+  background:#fff;
+  border-radius:16px;
+  padding:24px 28px;
+  border:1px solid rgba(11,21,56,.06);
+}
+.diag-card.alarma{
+  background:rgba(220,38,38,.04);
+  border-color:rgba(220,38,38,.12);
+}
+.diag-card-label{
+  font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:rgba(11,21,56,.35);margin-bottom:8px;
+}
+.diag-card-num{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:clamp(28px,3.5vw,42px);
+  font-weight:600;line-height:1;
+}
+.diag-card-num.rojo{color:var(--rojo)}
+.diag-card-num.navy{color:var(--navy)}
+.diag-card-sub{
+  font-size:13px;color:rgba(11,21,56,.45);margin-top:6px;line-height:1.5;
+}
+
+.diag-warning{
+  background:rgba(220,38,38,.06);
+  border:1px solid rgba(220,38,38,.15);
+  border-radius:12px;
+  padding:16px 20px;
+  font-size:13px;color:rgba(11,21,56,.6);
+  line-height:1.55;
+  display:none;
+}
+.diag-warning strong{color:var(--rojo);font-weight:700}
+.diag-warning.visible{display:block}
+
+/* ──────────────────────────────────────────────
+   OVERLAY DRAMÁTICO
+────────────────────────────────────────────── */
+#s-overlay{
+  background:var(--navy);
+  align-items:center;justify-content:center;
+  text-align:center;z-index:50;
+}
+.ov-inner{padding:32px}
+.ov-label{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;letter-spacing:.25em;text-transform:uppercase;
+  color:var(--gris2);margin-bottom:24px;
+  opacity:0;transition:opacity .6s .3s;
+}
+.ov-num{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:clamp(56px,10vw,120px);
+  font-weight:600;color:var(--oro);
+  line-height:1;letter-spacing:-.03em;
+  opacity:0;transform:scale(.92);
+  transition:opacity .7s .5s, transform .7s .5s;
+}
+.ov-sub{
+  font-size:clamp(15px,2vw,19px);
+  color:var(--gris1);margin-top:20px;
+  opacity:0;transition:opacity .6s .9s;
+}
+#s-overlay.reveal .ov-label,
+#s-overlay.reveal .ov-num,
+#s-overlay.reveal .ov-sub{opacity:1;transform:scale(1)}
+
+/* ──────────────────────────────────────────────
+   ACTO 2 — RESULTADOS
+────────────────────────────────────────────── */
+#s-acto2{
+  background:var(--navy);
+  overflow-y:auto;
+}
+.a2-wrap{max-width:1100px;margin:0 auto;padding:60px 32px}
+
+.a2-header{
+  text-align:center;margin-bottom:56px;
+}
+.a2-header-kicker{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--oro);margin-bottom:16px;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+}
+.a2-header-kicker::before,.a2-header-kicker::after{
+  content:"";width:24px;height:1px;background:var(--oro);opacity:.35;
+}
+.a2-header h2{
+  font-size:clamp(14px,2vw,16px);
+  font-weight:400;color:var(--gris1);
+  letter-spacing:.02em;margin-bottom:6px;
+}
+.a2-header .nombre-txt{
+  font-size:clamp(28px,4vw,44px);
+  font-weight:800;color:#fff;
+  letter-spacing:-.03em;
+}
+
+/* Número heroico */
+.a2-hero{
+  text-align:center;
+  background:rgba(255,255,255,.03);
+  border:1px solid var(--borde);
+  border-radius:24px;
+  padding:52px 40px 44px;
+  margin-bottom:32px;
+  position:relative;overflow:hidden;
+}
+.a2-hero::before{
+  content:"";position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0%,rgba(245,158,11,.08),transparent 60%);
+  pointer-events:none;
+}
+.a2-hero-label{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gris2);margin-bottom:16px;
+}
+.a2-hero-num{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:clamp(52px,9vw,100px);
+  font-weight:600;color:var(--oro);
+  line-height:1;letter-spacing:-.03em;
+  position:relative;
+}
+.a2-hero-num-tag{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  color:rgba(245,158,11,.4);margin-top:10px;
+}
+.a2-hero-bar{
+  display:flex;border-radius:6px;overflow:hidden;height:8px;
+  margin:28px 0 16px;
+}
+.a2-hero-bar-seg{transition:width .6s ease}
+.seg-ap{background:var(--azul)}
+.seg-rend{background:var(--oro)}
+.seg-bono{background:#10B981}
+.a2-hero-leyenda{
+  display:flex;justify-content:center;gap:28px;flex-wrap:wrap;
+}
+.ley-item{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--gris1)}
+.ley-dot{width:8px;height:8px;border-radius:2px;flex:0 0 auto}
+.ley-val{font-family:'IBM Plex Mono',monospace;font-weight:600;color:#fff;margin-left:2px}
+
+/* Grid de métricas */
+.a2-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:32px;
+}
+.a2-card{
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--borde);
+  border-radius:16px;
+  padding:24px 22px;
+}
+.a2-card-label{
+  font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--gris2);margin-bottom:8px;
+}
+.a2-card-num{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:clamp(22px,3vw,32px);font-weight:600;
+  color:#fff;line-height:1;
+}
+.a2-card-num.oro{color:var(--oro)}
+.a2-card-num.verde{color:#34D399}
+.a2-card-sub{font-size:12px;color:var(--gris2);margin-top:6px}
+
+/* Sección comparativa */
+.a2-compare{
+  display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px;
+}
+.cmp-card{
+  border-radius:16px;padding:28px 24px;
+}
+.cmp-bad{
+  background:rgba(220,38,38,.07);border:1px solid rgba(220,38,38,.15);
+}
+.cmp-good{
+  background:rgba(5,150,105,.07);border:1px solid rgba(5,150,105,.2);
+}
+.cmp-label{
+  font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  margin-bottom:10px;
+}
+.cmp-bad .cmp-label{color:rgba(248,113,113,.6)}
+.cmp-good .cmp-label{color:rgba(52,211,153,.6)}
+.cmp-num{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:clamp(24px,3vw,36px);font-weight:600;line-height:1;
+}
+.cmp-bad .cmp-num{color:#F87171}
+.cmp-good .cmp-num{color:#34D399}
+.cmp-sub{font-size:12px;margin-top:8px;color:var(--gris2)}
+
+/* Bono */
+.a2-bono{
+  background:rgba(245,158,11,.06);
+  border:1px solid rgba(245,158,11,.15);
+  border-radius:16px;padding:24px 28px;
+  margin-bottom:32px;
+  display:flex;align-items:center;gap:28px;flex-wrap:wrap;
+}
+.bono-pct{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:52px;font-weight:600;color:var(--oro);
+  line-height:1;
+}
+.bono-info{flex:1}
+.bono-info h4{color:#fff;font-size:16px;font-weight:700;margin-bottom:4px}
+.bono-info p{font-size:13px;color:var(--gris1);line-height:1.55}
+
+/* Costo de esperar */
+.a2-esperar{margin-bottom:32px}
+.a2-sec-title{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gris2);margin-bottom:16px;
+}
+.esp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.esp-item{
+  border-radius:14px;padding:20px 18px;text-align:center;
+  background:rgba(255,255,255,.04);border:1px solid var(--borde);
+}
+.esp-item.hoy{
+  background:rgba(245,158,11,.08);border-color:rgba(245,158,11,.2);
+}
+.esp-tag{font-size:11px;font-weight:600;color:var(--gris2);margin-bottom:8px;letter-spacing:.06em}
+.esp-val{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:clamp(16px,2vw,20px);font-weight:600;color:#fff;margin-bottom:4px;
+}
+.esp-item.hoy .esp-val{color:var(--oro)}
+.esp-diff{font-size:12px;color:rgba(248,113,113,.75)}
+
+/* ISR */
+.a2-isr{
+  background:rgba(26,64,184,.08);border:1px solid rgba(26,64,184,.18);
+  border-radius:16px;padding:22px 24px;margin-bottom:32px;
+  font-size:13px;color:var(--gris1);line-height:1.6;
+}
+.a2-isr strong{color:#fff}
+
+/* Casos reales */
+.a2-casos{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:32px}
+.caso-card{
+  background:rgba(255,255,255,.04);border:1px solid var(--borde);
+  border-left:4px solid var(--oro);border-radius:16px;padding:22px 20px;
+}
+.caso-pct{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:40px;font-weight:600;color:var(--azul);margin-bottom:6px;
+}
+.caso-perfil{font-size:13px;color:var(--gris1)}
+.caso-tiempo{font-size:12px;color:var(--gris2);margin-top:4px}
+
+/* Ficha de cierre */
+.a2-cierre{
+  background:var(--azul);border-radius:20px;padding:40px 36px;
+  text-align:center;
+}
+.cierre-titulo{font-size:clamp(18px,2.5vw,26px);font-weight:800;color:#fff;margin-bottom:8px;letter-spacing:-.02em}
+.cierre-sub{font-size:14px;color:rgba(255,255,255,.65);margin-bottom:28px;line-height:1.55}
+.cierre-btn{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--oro);color:var(--navy);
+  font-weight:800;font-size:15px;
+  padding:16px 36px;border-radius:12px;
+  border:none;cursor:pointer;text-decoration:none;
+  transition:transform .15s,opacity .15s;
+}
+.cierre-btn:hover{transform:translateY(-2px);opacity:.9}
+.a2-legal{
+  text-align:center;margin-top:24px;
+  font-size:11px;color:var(--gris2);line-height:1.6;
+}
+
+/* ──────────────────────────────────────────────
+   PANEL DE NOTAS — Alejandro
+────────────────────────────────────────────── */
+#panel-notas{
+  position:fixed;right:-340px;top:0;bottom:0;width:320px;
+  background:#0d1a3e;border-left:1px solid rgba(255,255,255,.08);
+  z-index:200;
+  display:flex;flex-direction:column;
+  transition:right .3s ease;
+  padding:24px 20px;
+}
+#panel-notas.open{right:0}
+.notas-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:16px;
+}
+.notas-header h3{
+  font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--oro);
+}
+.notas-close{
+  background:none;border:none;cursor:pointer;color:var(--gris1);
+  font-size:18px;line-height:1;padding:4px;
+}
+#notas-ta{
+  flex:1;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);
+  border-radius:10px;color:#fff;font-family:'Manrope',sans-serif;font-size:13px;
+  padding:14px;resize:none;outline:none;line-height:1.6;
+}
+#notas-ta::placeholder{color:rgba(255,255,255,.2)}
+.notas-hint{
+  margin-top:12px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--gris2);text-align:center;
+}
+
+/* ──────────────────────────────────────────────
+   BOTÓN DE NOTAS (flotante)
+────────────────────────────────────────────── */
+#btn-notas{
+  position:fixed;bottom:28px;right:28px;z-index:199;
+  background:rgba(13,26,62,.9);
+  border:1px solid rgba(255,255,255,.1);
+  color:var(--gris1);
+  font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  padding:10px 16px;border-radius:10px;
+  cursor:pointer;backdrop-filter:blur(8px);
+  display:flex;align-items:center;gap:7px;
+  transition:opacity .2s;
+}
+#btn-notas:hover{opacity:.8}
+#btn-notas.hidden{display:none}
+
+/* ──────────────────────────────────────────────
+   NAV DISCRETA (visible desde acto 1 en adelante)
+────────────────────────────────────────────── */
+#topbar{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 28px;
+  background:rgba(11,21,56,.92);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--borde);
+  opacity:0;pointer-events:none;
+  transition:opacity .4s;
+}
+#topbar.visible{opacity:1;pointer-events:all}
+.tb-brand{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:700;color:#fff}
+.tb-brand img{width:22px;height:22px}
+.tb-step{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--gris2);
+}
+.tb-back{
+  background:none;border:1px solid rgba(255,255,255,.1);
+  color:var(--gris1);font-size:12px;font-weight:600;
+  padding:7px 14px;border-radius:8px;cursor:pointer;
+  transition:opacity .15s;
+}
+.tb-back:hover{opacity:.7}
+
+/* ──────────────────────────────────────────────
+   RESPONSIVE
+────────────────────────────────────────────── */
+@media(max-width:900px){
+  html,body{overflow:auto}
+  .screen{position:relative;height:auto}
+  .a1-layout{grid-template-columns:1fr}
+  .a1-left{position:relative;height:auto;padding:48px 28px}
+  .a1-right{padding:32px 28px}
+  .a2-grid{grid-template-columns:1fr 1fr}
+  .a2-compare{grid-template-columns:1fr}
+  .esp-grid{grid-template-columns:1fr 1fr}
+  .a2-casos{grid-template-columns:1fr}
+  #panel-notas{width:280px;right:-300px}
+}
+@media(max-width:600px){
+  .a2-grid{grid-template-columns:1fr}
+  .esp-grid{grid-template-columns:1fr 1fr}
+  .a2-bono{flex-direction:column}
 }
 </style>
 </head>
 <body>
 
-<header class="nav">
-  <div class="wrap">
-    <div class="brand">
-      <img src="logo-symbol.svg" alt="MINA">
-      <span>MINA</span>
-    </div>
-    <a href="#cta" class="nav-cta">Agenda tu sesión →</a>
+<!-- TOPBAR DISCRETA -->
+<div id="topbar">
+  <div class="tb-brand">
+    <img src="logo-symbol.svg" alt="">
+    Simulador Patrimonial
   </div>
-</header>
+  <span class="tb-step" id="tb-step-txt"></span>
+  <button class="tb-back" id="btn-volver" onclick="volverAInicio()">← Reiniciar</button>
+</div>
 
-<!-- ══════════════════════════════════════════ HOOK -->
-<section class="hook">
-  <div class="wrap">
-    <div class="hook-kicker"><span class="kicker">Planificación patrimonial</span></div>
-    <h1>Tu ingreso trabaja<br>durante el día.<br><em>¿Quién trabaja de noche?</em></h1>
-    <p class="hook-sub">Cada mes que pasa sin una estrategia estructurada es dinero que el tiempo no puede recuperar. Descubre cuánto puede crecer lo tuyo.</p>
-    <a href="#simulador" class="hook-scroll">
-      Calcula tu proyección
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M4 9l4 4 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </a>
-    <div class="hook-trust">
-      <strong>Respaldado por</strong>
-      <span>Institución regulada · presencia en 70+ países</span>
-      <span>·</span>
-      <span>CONDUSEF</span>
-      <span>·</span>
-      <span>CNSF</span>
-      <span>·</span>
-      <span>SHCP</span>
-    </div>
+<!-- PANEL DE NOTAS (Alejandro) -->
+<div id="panel-notas">
+  <div class="notas-header">
+    <h3>Notas de reunión</h3>
+    <button class="notas-close" onclick="toggleNotas()">×</button>
   </div>
-</section>
+  <textarea id="notas-ta" placeholder="Escribe aquí lo que el doctor comenta...&#10;&#10;• Objeciones&#10;• Intereses&#10;• Seguimiento"></textarea>
+  <div class="notas-hint">N para abrir · Esc para cerrar</div>
+</div>
 
-<!-- ══════════════════════════════════════════ PROBLEMA -->
-<section class="problema">
-  <div class="wrap">
-    <span class="kicker">El problema real</span>
-    <h2 style="font-size:clamp(22px,3vw,32px);color:var(--subsuelo);margin:10px 0 6px">Generar dinero no es lo mismo que acumular patrimonio.</h2>
-    <p style="color:var(--muted);font-size:15px;max-width:540px;margin-bottom:0">Hay tres fuerzas que deciden si tu dinero crece o se queda quieto. El tiempo amplifica las tres.</p>
-    <div class="prob-grid">
-      <div class="prob-card">
-        <div class="prob-num">+4%</div>
-        <div class="prob-label">Inflación anual en México</div>
-        <div class="prob-desc">El dinero que guardas en el banco no solo no crece — pierde poder adquisitivo cada año. Lo que hoy vale $100 en 25 años valdrá menos de la mitad.</div>
-      </div>
-      <div class="prob-card">
-        <div class="prob-num">12%</div>
-        <div class="prob-label">Rendimiento histórico del S&amp;P 500</div>
-        <div class="prob-desc">El índice más representativo del mercado ha promediado rendimientos anuales superiores al 12% en los últimos 30 años. Lo usamos como referencia histórica en nuestras proyecciones ilustrativas — no es una garantía.</div>
-      </div>
-      <div class="prob-card">
-        <div class="prob-num">0%</div>
-        <div class="prob-label">ISR sobre el capital acumulado</div>
-        <div class="prob-desc">Con la estructura correcta, el capital y los rendimientos quedan exentos de ISR al momento del retiro.</div>
-        <div class="prob-isr-note">Condición: retiro a partir de los 60 años, habiendo mantenido la inversión al menos 5 años (Art. 93-XXI LISR)</div>
-      </div>
-    </div>
-    <div class="prob-bottom">
-      <div class="prob-bottom-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--oro)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21h6M12 3a6 6 0 0 1 6 6c0 2.22-1.2 4.16-3 5.2V17a1 1 0 0 1-1 1H10a1 1 0 0 1-1-1v-2.8C7.2 13.16 6 11.22 6 9a6 6 0 0 1 6-6Z"/></svg></div>
-      <p>La diferencia entre quienes llegan a los 60 con patrimonio y quienes no, no es cuánto ganaron — es si tuvieron <strong>un sistema que les hiciera ganar mientras dormían.</strong></p>
-    </div>
-  </div>
-</section>
+<!-- BTN NOTAS FLOTANTE -->
+<button id="btn-notas" onclick="toggleNotas()">
+  <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 5H6a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2v-5m-1.414-9.414a2 2 0 1 1 2.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+  Notas
+</button>
 
-<!-- ══════════════════════════════════════════ INICIO SECCIÓN AHORRO -->
-<div class="sec-ahorro">
-  <div class="wrap">
-    <div class="sec-ahorro-head">
-      <span class="kicker">Ahorro · Seguro de Vida para Inversión</span>
-      <h2>Empieza con lo que puedes apartar cada mes.</h2>
-      <p>Un instrumento de largo plazo que acumula tu patrimonio de forma constante, con beneficio fiscal al retiro y protección para tu familia desde el primer día.</p>
-      <span class="product-tag">OptiMaxx Plus · Allianz</span>
+<!-- ═══════════════════════════════════════════
+     PANTALLA 0 — GANCHO
+═══════════════════════════════════════════ -->
+<div class="screen active" id="s-gancho">
+  <div class="gancho-glow"></div>
+  <div class="gancho-glow2"></div>
+  <div class="gancho-inner">
+    <div class="g-pretitulo">Diagnóstico Patrimonial</div>
+
+    <h1 class="g-titulo">
+      Cada mes que pasa<br>sin una estrategia,<br><em>pierdes esto.</em>
+    </h1>
+
+    <div class="g-perdida-wrap">
+      <div class="g-perdida-label">Costo de oportunidad mensual estimado</div>
+      <div class="g-perdida-num" id="perdida-counter">$0</div>
+      <div class="g-perdida-sub">Para un médico especialista que no tiene el capital trabajando</div>
+    </div>
+
+    <p class="g-sub">
+      En 20 minutos vas a ver <strong>tu número exacto</strong>:<br>
+      lo que tu patrimonio puede llegar a ser antes de los 60.
+    </p>
+
+    <button class="g-btn" onclick="irAActo1()">
+      Calculemos tu escenario
+      <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </button>
+
+    <div class="g-trust">
+      <span class="g-trust-item">Institución regulada</span>
+      <span class="g-trust-item">·</span>
+      <span class="g-trust-item">Presencia en 70+ países</span>
+      <span class="g-trust-item">·</span>
+      <span class="g-trust-item">Estructura legal inembargable</span>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════ SIMULADOR -->
-<section class="sim-hero" id="simulador">
-  <div class="wrap">
-    <div class="sim-hero-top">
-      <span class="kicker">Simulador en tiempo real</span>
-      <h2>Así crece<span class="name-inline" id="hero-name-inline"></span> tu patrimonio.</h2>
-      <p class="sim-hero-sub">Mueve los controles — los números se actualizan al instante. Proyección ilustrativa a tasa del 12% anual.</p>
-    </div>
-    <div class="name-row">
-      <span class="name-label">Simulando para</span>
-      <input class="name-input" id="nombre" type="text" placeholder="Nombre del cliente" autocomplete="off">
-    </div>
-    <div class="sliders">
-      <div class="slider-block">
-        <div class="sl-label">Ahorro mensual</div>
-        <div class="sl-val">$<span id="val-mensual">3,000</span><em>MXN</em></div>
-        <input type="range" id="sl-mensual" min="2000" max="25000" step="500" value="3000">
-        <div class="sl-range"><span>$2,000</span><span>$25,000</span></div>
-        <div class="sl-note">Montos orientativos — confirmar con el asesor.</div>
-      </div>
-      <div class="slider-block">
-        <div class="sl-label">Edad actual</div>
-        <div class="sl-val"><span id="val-edad">35</span><em>años</em></div>
-        <input type="range" id="sl-edad" min="20" max="55" step="1" value="35">
-        <div class="sl-range"><span>20</span><span>55</span></div>
-      </div>
-      <div class="slider-block">
-        <div class="sl-label">Gasto mensual actual</div>
-        <div class="sl-val">$<span id="val-gasto">27,000</span><em>MXN</em></div>
-        <input type="range" id="sl-gasto" min="5000" max="150000" step="1000" value="27000">
-        <div class="sl-range"><span>$5,000</span><span>$150,000</span></div>
-        <div class="sl-note">Lo que necesitas mantener tu estilo de vida hoy.</div>
-      </div>
-    </div>
-  </div>
-</section>
+<!-- ═══════════════════════════════════════════
+     PANTALLA 1 — ACTO 1: DIAGNÓSTICO
+═══════════════════════════════════════════ -->
+<div class="screen" id="s-acto1">
+  <div class="a1-layout">
 
-<!-- STATS STRIP -->
-<div class="stats-strip">
-  <div class="wrap" style="padding:0">
-    <div class="stats-inner">
-      <div class="stat-item">
-        <div class="stat-sl">Proyección al retiro</div>
-        <div class="stat-big" id="s-total">—</div>
-        <div class="stat-desc">exento de ISR a partir de los 60 años (Art. 93)</div>
+    <!-- Izquierda: inputs (Mario conduce) -->
+    <div class="a1-left">
+      <div class="a1-step-label">Paso 1 de 2 · Diagnóstico</div>
+
+      <h2 class="a1-pregunta">
+        Dime tres cosas<br>y calculamos <em>tu realidad</em>
+      </h2>
+
+      <div class="a1-inputs">
+
+        <div class="inp-group">
+          <label class="inp-label" for="i-nombre">¿Cómo te llamas, Doctor?</label>
+          <div class="inp-row">
+            <input class="inp-num" type="text" id="i-nombre" placeholder="Tu nombre" style="font-family:'Manrope',sans-serif;font-size:32px" oninput="actualizarDiag()">
+          </div>
+        </div>
+
+        <div class="inp-group">
+          <label class="inp-label" for="i-edad">¿Cuántos años tienes?</label>
+          <div class="inp-row">
+            <input class="inp-num" type="number" id="i-edad" placeholder="40" min="25" max="58" oninput="actualizarDiag()">
+          </div>
+          <div class="sl-wrap">
+            <input type="range" id="sl-edad" min="25" max="58" value="40" oninput="document.getElementById('i-edad').value=this.value;actualizarDiag()">
+            <div class="sl-range"><span>25</span><span>58</span></div>
+          </div>
+        </div>
+
+        <div class="inp-group">
+          <label class="inp-label" for="i-ingreso">Ingreso mensual aproximado</label>
+          <div class="inp-row">
+            <span class="inp-prefix">$</span>
+            <input class="inp-num" type="number" id="i-ingreso" placeholder="80,000" min="20000" max="500000" step="5000" oninput="actualizarDiag()">
+          </div>
+          <div class="sl-wrap">
+            <input type="range" id="sl-ingreso" min="20000" max="400000" step="5000" value="120000" oninput="document.getElementById('i-ingreso').value=this.value;actualizarDiag()">
+            <div class="sl-range"><span>$20k</span><span>$400k</span></div>
+          </div>
+        </div>
+
+        <div class="inp-group">
+          <label class="inp-label" for="i-ahorro">¿Cuánto puedes separar cada mes?</label>
+          <div class="inp-row">
+            <span class="inp-prefix">$</span>
+            <input class="inp-num" type="number" id="i-ahorro" placeholder="8,000" min="2000" max="25000" step="500" oninput="actualizarDiag()">
+          </div>
+          <div class="sl-wrap">
+            <input type="range" id="sl-ahorro" min="2000" max="25000" step="500" value="8000" oninput="document.getElementById('i-ahorro').value=this.value;actualizarDiag()">
+            <div class="sl-range"><span>$2k</span><span>$25k</span></div>
+          </div>
+        </div>
+
       </div>
-      <div class="stat-item">
-        <div class="stat-sl">Genera la inversión</div>
-        <div class="stat-big gold" id="s-rendimientos">—</div>
-        <div class="stat-desc">sobre lo que tú aportaste</div>
+
+      <button class="a1-cta" id="btn-revelar" onclick="revelar()">
+        Ver mi escenario patrimonial
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+
+    <!-- Derecha: diagnóstico en vivo -->
+    <div class="a1-right">
+      <div class="diag-title">Diagnóstico en tiempo real</div>
+
+      <div class="diag-card alarma">
+        <div class="diag-card-label">ISR estimado que pagas este año</div>
+        <div class="diag-card-num rojo" id="d-isr">—</div>
+        <div class="diag-card-sub" id="d-isr-sub">Ingresa tu ingreso para calcular</div>
       </div>
-      <div class="stat-item">
-        <div class="stat-sl">Lo que aportas tú</div>
-        <div class="stat-big" id="s-aportado">—</div>
-        <div class="stat-desc" id="s-aportado-sub">—</div>
+
+      <div class="diag-card">
+        <div class="diag-card-label">ISR acumulado en 20 años (sin instrumento)</div>
+        <div class="diag-card-num rojo" id="d-isr-total">—</div>
+        <div class="diag-card-sub">Capital que sale de tu patrimonio permanentemente</div>
       </div>
-      <div class="stat-item">
-        <div class="stat-sl">Multiplicador</div>
-        <div class="stat-big gold" id="s-mult">—</div>
-        <div class="stat-desc">por cada peso que metes</div>
+
+      <div class="diag-card">
+        <div class="diag-card-label">Años al horizonte fiscal (60 años)</div>
+        <div class="diag-card-num navy" id="d-anos">—</div>
+        <div class="diag-card-sub" id="d-anos-sub">Tu ventana de acumulación</div>
+      </div>
+
+      <div class="diag-card">
+        <div class="diag-card-label">Lo que dejas ir cada mes (sin estrategia)</div>
+        <div class="diag-card-num rojo" id="d-costo">—</div>
+        <div class="diag-card-sub">Diferencial de rendimiento: capital sin trabajar</div>
+      </div>
+
+      <div class="diag-warning" id="d-warning">
+        <strong>Atención:</strong> con el tiempo disponible y esa aportación,
+        la diferencia entre actuar hoy y esperar 2 años puede superar los <span id="d-warning-monto">$X</span>.
       </div>
     </div>
+
   </div>
 </div>
 
-<!-- CHART -->
-<section class="chart-sec">
-  <div class="wrap">
-    <div class="chart-card">
-      <div class="chart-top">
-        <div>
-          <div class="chart-title">Curva patrimonial</div>
-          <div class="chart-sub" id="chart-name-label">Proyección personalizada</div>
-        </div>
-        <div class="tasa-badge">
-          <span>Rendimiento proyectado</span>
-          <span>12% anual</span>
-          <small>proyección ilustrativa · no garantizada</small>
-        </div>
-      </div>
-      <div class="phases">
-        <span class="phase-tag"><span class="phase-dot" style="background:#A5B4FC"></span>Acumulación</span>
-        <span class="phase-tag"><span class="phase-dot" style="background:var(--azul)"></span>Crecimiento</span>
-        <span class="phase-tag"><span class="phase-dot" style="background:var(--oro)"></span>Retiro</span>
-      </div>
-      <div class="chart-wrap">
-        <canvas id="curvaChart" role="img" aria-label="Curva patrimonial personalizada"></canvas>
-      </div>
-      <p class="chart-disclaimer">Proyección a tasa ilustrativa del 12% anual basada en el rendimiento histórico del S&amp;P 500 en los últimos 30 años. Los rendimientos reales dependen del comportamiento del mercado y no están garantizados. Los cargos de administración y gestión aplican según condiciones de la póliza.</p>
-    </div>
+<!-- ═══════════════════════════════════════════
+     OVERLAY DRAMÁTICO
+═══════════════════════════════════════════ -->
+<div class="screen" id="s-overlay">
+  <div class="ov-inner">
+    <div class="ov-label">Tu patrimonio proyectado a los 60 años</div>
+    <div class="ov-num" id="ov-num">$0</div>
+    <div class="ov-sub">Basado en tu aportación mensual · 12% ilustrativo anual</div>
   </div>
-</section>
+</div>
 
-<!-- ══════════════════════════════════════════ INFLACIÓN EN EL TIEMPO -->
-<section class="inflacion-sec">
-  <div class="wrap">
-    <div class="inflacion-card">
-      <div class="infl-top">
-        <span class="kicker" style="margin-bottom:12px;display:inline-flex">Por qué importa actuar hoy</span>
-        <p>Con 4% de inflación anual, lo que hoy te cuesta <span id="inf-hoy">$27,000</span> al mes <strong>costará casi el doble en 25 años.</strong> Tu patrimonio necesita crecer más rápido que tu costo de vida.</p>
-      </div>
-      <div class="infl-row">
-        <div class="infl-item now">
-          <div class="infl-lbl">Hoy</div>
-          <div class="infl-val" id="inf-v0">$27,000</div>
-        </div>
-        <div class="infl-arrow">→</div>
-        <div class="infl-item mid">
-          <div class="infl-lbl">En 10 años</div>
-          <div class="infl-val" id="inf-v10">$39,930</div>
-        </div>
-        <div class="infl-arrow">→</div>
-        <div class="infl-item far">
-          <div class="infl-lbl">En 25 años</div>
-          <div class="infl-val" id="inf-v25">$72,004</div>
-        </div>
-      </div>
-      <p class="infl-note">Gasto mensual necesario con <strong>4% de inflación anual</strong>. El instrumento proyecta un rendimiento del 12% anual (ilustrativo) — 8 puntos por encima de la inflación.</p>
-    </div>
-  </div>
-</section>
+<!-- ═══════════════════════════════════════════
+     ACTO 2 — RESULTADOS COMPLETOS
+═══════════════════════════════════════════ -->
+<div class="screen" id="s-acto2">
+  <div class="a2-wrap">
 
-<!-- MILESTONES -->
-<section class="miles-sec">
-  <div class="wrap">
-    <div class="mile-grid" id="milestones"></div>
-  </div>
-</section>
+    <div class="a2-header">
+      <div class="a2-header-kicker">Escenario personal</div>
+      <div class="a2-header h2">Proyección para</div>
+      <div class="a2-header nombre-txt" id="a2-nombre">el Doctor</div>
+    </div>
 
-<!-- COSTO DE ESPERAR -->
-<section class="esperar-sec">
-  <div class="wrap">
-    <div class="esperar-card">
-      <div class="esperar-head">
-        <span class="kicker" style="color:var(--oro)"><span style="background:var(--oro)"></span>El costo de esperar</span>
-        <h3>Cada año que pasa,<br>el dinero que pierdes no regresa.</h3>
-        <p>No es lo que dejas de ganar — es lo que el tiempo hubiera hecho crecer por ti. Proyección ilustrativa a 12% anual.</p>
+    <!-- Número heroico -->
+    <div class="a2-hero">
+      <div class="a2-hero-label">Patrimonio proyectado · a los 60 años</div>
+      <div class="a2-hero-num" id="a2-total">$0</div>
+      <div class="a2-hero-num-tag">proyección ilustrativa · 12% anual · no garantizada</div>
+      <div class="a2-hero-bar">
+        <div class="a2-hero-bar-seg seg-ap" id="bar-ap" style="width:30%"></div>
+        <div class="a2-hero-bar-seg seg-rend" id="bar-rend" style="width:55%"></div>
+        <div class="a2-hero-bar-seg seg-bono" id="bar-bono" style="width:15%"></div>
       </div>
-      <div class="esperar-grid" id="esperar-grid"></div>
+      <div class="a2-hero-leyenda">
+        <div class="ley-item"><div class="ley-dot" style="background:var(--azul)"></div>Aportado <span class="ley-val" id="ley-ap">—</span></div>
+        <div class="ley-item"><div class="ley-dot" style="background:var(--oro)"></div>Rendimiento <span class="ley-val" id="ley-rend">—</span></div>
+        <div class="ley-item"><div class="ley-dot" style="background:#10B981"></div>Bono fidelidad <span class="ley-val" id="ley-bono">—</span></div>
+      </div>
     </div>
-  </div>
-</section>
 
-<!-- ══════════════════════════════════════════ CÓMO FUNCIONA -->
-<section class="como">
-  <div class="wrap">
-    <div class="como-head">
-      <span class="kicker" style="justify-content:center"><span style="background:var(--oro)"></span>Cómo funciona</span>
-      <h2>Tres pasos. Una sola decisión.</h2>
-      <p>El sistema trabaja solo — tú defines cuánto quieres construir y nosotros ejecutamos.</p>
-    </div>
-    <div class="como-steps">
-      <div class="como-step">
-        <div class="step-num">1</div>
-        <div class="step-title">Defines tu ahorro</div>
-        <div class="step-desc">Eliges cuánto apartas cada mes. Sin gastos ocultos, sin inversión mínima inalcanzable. El plan se adapta a lo que tú puedes comprometer hoy.</div>
-        <span class="step-highlight">Desde $2,000/mes</span>
-        <span class="step-note">Monto orientativo — confirmar con el asesor.</span>
+    <!-- Grid de métricas clave -->
+    <div class="a2-grid">
+      <div class="a2-card">
+        <div class="a2-card-label">Aportación mensual</div>
+        <div class="a2-card-num oro" id="a2-mensual">—</div>
+        <div class="a2-card-sub" id="a2-mensual-sub">durante <span id="a2-anos">—</span> años</div>
       </div>
-      <div class="como-step">
-        <div class="step-num">2</div>
-        <div class="step-title">Seleccionamos los activos para ti</div>
-        <div class="step-desc">Tu ahorro entra a un fideicomiso que invierte en mercados globales. Tienes acceso a 19 alternativas de inversión: ETFs del S&amp;P 500, NASDAQ y más.</div>
-        <span class="step-highlight">19 alternativas de inversión</span>
+      <div class="a2-card">
+        <div class="a2-card-label">Multiplicador</div>
+        <div class="a2-card-num verde" id="a2-mult">—</div>
+        <div class="a2-card-sub">por cada peso aportado</div>
       </div>
-      <div class="como-step">
-        <div class="step-num">3</div>
-        <div class="step-title">Ejecutamos la estrategia</div>
-        <div class="step-desc">El fideicomiso trabaja solo. A partir de los 60 años, retiras el capital acumulado y sus rendimientos exentos de ISR, si mantuviste la inversión al menos 5 años (Art. 93-XXI LISR).</div>
-        <span class="step-highlight">Exento de ISR · desde los 60 años</span>
-        <span class="step-note">Producto pensado para largo plazo (mínimo 5 años). Los retiros antes del plazo comprometido generan cargos.</span>
+      <div class="a2-card">
+        <div class="a2-card-label">ISR ahorrado en retiro</div>
+        <div class="a2-card-num verde" id="a2-isr-ah">$0</div>
+        <div class="a2-card-sub">Art. 93-XXI · exento desde los 60</div>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- ══════════════════════════════════════════ VENTAJAS (AHORRO) -->
-<section class="ventajas">
-  <div class="wrap">
-    <div class="ventajas-head">
-      <span class="kicker" style="justify-content:center"><span style="background:var(--oro)"></span>Por qué este vehículo</span>
-      <h2>Diseñado para proteger y multiplicar.</h2>
-      <p>No es un seguro de gastos médicos, no es una AFORE, no es un CETE. Es un fideicomiso patrimonial con cobertura de vida incluida.</p>
-    </div>
-    <div class="ventajas-grid">
-      <div class="vent vent-hi">
-        <div class="vent-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 22h18M4 10h16M2 10l10-7 10 7M6 10v8M10 10v8M14 10v8M18 10v8"/></svg></div>
-        <div class="vent-title">Institución regulada</div>
-        <div class="vent-desc">Supervisado por CNSF, CONDUSEF y SHCP. Con presencia en más de 70 países y décadas de operación en México.</div>
-        <span class="vent-tag">CNSF · CONDUSEF · SHCP</span>
+    <!-- Comparativa: sin/con instrumento -->
+    <div class="a2-compare">
+      <div class="cmp-card cmp-bad">
+        <div class="cmp-label">Sin instrumento · CETES actuales</div>
+        <div class="cmp-num" id="cmp-sin">—</div>
+        <div class="cmp-sub">~9.8% bruto · -ISR = ~7% neto real</div>
       </div>
-      <div class="vent">
-        <div class="vent-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
-        <div class="vent-title">Fideicomiso protegido</div>
-        <div class="vent-desc">Tu patrimonio queda dentro de un fideicomiso. Protegido y separado de tu patrimonio personal.</div>
-      </div>
-      <div class="vent">
-        <div class="vent-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="13" y2="17"/></svg></div>
-        <div class="vent-title">Sucesión sin juicio</div>
-        <div class="vent-desc">En caso de fallecimiento, el capital pasa directo a tus beneficiarios, libre de ISR, sin necesidad de abogados ni juicio sucesorio.</div>
-      </div>
-      <div class="vent">
-        <div class="vent-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><path d="M12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7ZM12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7Z"/></svg></div>
-        <div class="vent-title">Bono de hasta 100%</div>
-        <div class="vent-desc">La institución bonifica parte de tus aportaciones del primer año. Ese bono también entra al fideicomiso y genera rendimientos hasta el retiro.</div>
+      <div class="cmp-card cmp-good">
+        <div class="cmp-label">Con OptiMaxx Plus · exento ISR</div>
+        <div class="cmp-num" id="cmp-con">—</div>
+        <div class="cmp-sub">12% ilustrativo · 100% libre de ISR a los 60</div>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- ══════════════════════════════════════════ BONO -->
-<section class="bono-sec">
-  <div class="wrap">
-    <div class="bono-card">
-      <div class="bono-inner">
-        <div class="bono-left">
-          <span class="kicker">Bono de fidelidad</span>
-          <h3>La institución bonifica<br>parte de tu primer año.</h3>
-          <p>Al cumplir el plazo comprometido, se acredita un bono sobre tus aportaciones iniciales. Ese bono entra al fideicomiso y crece con la misma proyección hasta el retiro.</p>
-          <div class="bono-note">El bono aplica al terminar el plazo comprometido y requiere cumplir el esquema de pagos. Es un beneficio de largo plazo, no una garantía inmediata.</div>
-          <div class="bono-table">
-            <div class="bono-tr">
-              <div class="bono-td">Ahorro mensual</div>
-              <div class="bono-td">Bono orientativo</div>
-            </div>
-            <div class="bono-tr">
-              <div class="bono-td">$2,000 – $2,999</div>
-              <div class="bono-td">55%</div>
-            </div>
-            <div class="bono-tr">
-              <div class="bono-td">$3,000 – $4,999</div>
-              <div class="bono-td">65%</div>
-            </div>
-            <div class="bono-tr">
-              <div class="bono-td">$5,000 – $7,499</div>
-              <div class="bono-td">75%</div>
-            </div>
-            <div class="bono-tr hi">
-              <div class="bono-td">$7,500 en adelante</div>
-              <div class="bono-td">100%</div>
-            </div>
-          </div>
-        </div>
-        <div class="bono-right">
-          <div class="bono-item b1">
-            <div class="bono-lbl">Tu ahorro año 1</div>
-            <div class="bono-val" id="b-ap1">—</div>
-            <div class="bono-desc">lo que tú aportas</div>
-          </div>
-          <div class="bono-item b2">
-            <div class="bono-lbl" id="b-bono-pct">Bono fidelidad · 65%</div>
-            <div class="bono-val" id="b-bono">—</div>
-            <div class="bono-desc" id="b-bono-desc">bono orientativo</div>
-          </div>
-          <div class="bono-item b3">
-            <div class="bono-lbl">Proyección año 1 con bono</div>
-            <div class="bono-val" id="b-total1">—</div>
-            <div class="bono-desc">ya invertido + bono</div>
-          </div>
-        </div>
+    <!-- Bono fidelidad -->
+    <div class="a2-bono">
+      <div class="bono-pct" id="a2-bono-pct">—%</div>
+      <div class="bono-info">
+        <h4>Bono de fidelidad · primer año</h4>
+        <p>Sobre tus primeras 12 aportaciones recibes un bono de <strong id="a2-bono-monto">—</strong> acreditado al plan. Ningún banco ni AFORE lo tiene. La institución co-invierte contigo desde el primer mes.</p>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- ══════════════════════════════════════════ RESUMEN PERSONAL -->
-<section class="resumen-sec">
-  <div class="wrap">
-    <div class="resumen-card">
-      <div class="resumen-top">
-        <div>
-          <div class="resumen-who">Proyección personal · ilustrativa</div>
-          <div class="resumen-nombre" id="r-nombre">Tu plan de inversión</div>
-          <div class="resumen-tagline">Tú produces el dinero. El tiempo hace el resto.</div>
-        </div>
-        <div class="resumen-mina">
-          <img src="logo-symbol.svg" alt="MINA">
-          <span>MINA Patrimonial</span>
-        </div>
-      </div>
-      <div class="resumen-grid">
-        <div class="ritem main">
-          <div class="ri-lbl">Proyección al retiro</div>
-          <div class="ri-val" id="r-total">—</div>
-          <div class="ri-desc">exento de ISR a partir de los 60 años (Art. 93-XXI), habiendo mantenido la inversión al menos 5 años</div>
-        </div>
-        <div class="ritem reg">
-          <div class="ri-lbl">Ahorro mensual</div>
-          <div class="ri-val" id="r-mensual">—</div>
-          <div class="ri-desc">lo que sale de tu bolsillo</div>
-        </div>
-        <div class="ritem reg">
-          <div class="ri-lbl">Genera la inversión</div>
-          <div class="ri-val" id="r-rend">—</div>
-          <div class="ri-desc">rendimientos acumulados (proyección ilustrativa)</div>
-        </div>
-        <div class="ritem reg">
-          <div class="ri-lbl">Multiplicador</div>
-          <div class="ri-val" id="r-mult">—</div>
-          <div class="ri-desc">por cada peso que entra</div>
-        </div>
-      </div>
-      <div class="resumen-footer">
-        <p>Fideicomiso regulado · CONDUSEF · CNSF · SHCP</p>
-        <p>Proyección ilustrativa al 12% anual. Rendimientos no garantizados.</p>
-      </div>
+    <!-- Costo de esperar -->
+    <div class="a2-esperar">
+      <div class="a2-sec-title">Costo de esperar</div>
+      <div class="esp-grid" id="esp-grid"></div>
     </div>
-  </div>
-</section>
 
-<!-- ══════════════════════════════════════════ INICIO SECCIÓN PATRIMONIAL -->
-<section class="sec-patrimonial">
-  <div class="wrap">
-    <span class="kicker">Patrimonial · Para capital ya acumulado</span>
-    <h2>¿Ya tienes un capital inicial?<br>Hay otro vehículo.</h2>
-    <p class="lead">El segmento patrimonial está diseñado para quienes ya cuentan con capital acumulado y quieren hacerlo crecer con mayor diversificación. Es un producto diferente al de ahorro mensual — te lo explicamos en la sesión.</p>
-    <div class="pat-products">
-      <div class="pat-card">
-        <span class="pat-badge">Renta Variable</span>
-        <div class="pat-name">OptiMaxx Patrimonial</div>
-        <div class="pat-desc">Inversión en más de 50 alternativas globales: ETFs del S&amp;P 500, NASDAQ, oro, commodities y más. Sin plazo comprometido después del mínimo inicial. Riesgo de mercado — el valor sube y baja, pero la diversificación reduce el riesgo de pérdida permanente.</div>
-        <div class="pat-stats">
-          <div class="pat-stat"><strong>Desde $250,000</strong>apertura mínima</div>
-          <div class="pat-stat"><strong>Recomendado $1M+</strong>mejor diversificación</div>
-          <div class="pat-stat"><strong>Plazo mínimo 5 años</strong>para beneficio fiscal</div>
-        </div>
+    <!-- Casos reales -->
+    <div class="a2-sec-title">Rendimientos reales de clientes actuales</div>
+    <div class="a2-casos">
+      <div class="caso-card">
+        <div class="caso-pct">+15.2%</div>
+        <div class="caso-perfil">Médico especialista · CDMX</div>
+        <div class="caso-tiempo">en 4 meses · marzo – junio 2025</div>
       </div>
-      <div class="pat-card">
-        <span class="pat-badge">Renta Fija</span>
-        <div class="pat-name">OptiMaxx Elite</div>
-        <div class="pat-desc">La "chequera de inversión". Capital líquido que genera rendimientos en renta fija. Ideal como reserva de capital de trabajo con beneficio fiscal. Libre de ISR si se mantiene al menos 5 años y se retira a partir de los 60 (Art. 93-XXI LISR).</div>
-        <div class="pat-stats">
-          <div class="pat-stat"><strong>Desde $300,000</strong>apertura mínima</div>
-          <div class="pat-stat"><strong>Saldo mínimo $15,000</strong>para mantener activo</div>
-          <div class="pat-stat"><strong>Costo 0.75% anual</strong>sobre saldo</div>
-        </div>
+      <div class="caso-card">
+        <div class="caso-pct">+19.1%</div>
+        <div class="caso-perfil">Médico especialista · Monterrey</div>
+        <div class="caso-tiempo">en 5 meses · febrero – junio 2025</div>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- PRUEBA REAL (dentro de patrimonial) -->
-<section class="prueba">
-  <div class="wrap">
-    <div class="prueba-head">
-      <span class="kicker" style="color:var(--oro)"><span style="background:var(--oro)"></span>Resultados reales · segmento patrimonial</span>
-      <h3>Esto no es una proyección.<br>Es lo que ya está pasando.</h3>
-      <p>Clientes reales en el segmento Patrimonial (renta variable). Estos números corresponden a OptiMaxx Patrimonial — no al simulador de ahorro mensual de arriba. Las inversiones en mercados de valores implican riesgo de pérdida.</p>
+    <!-- ISR disclaimer -->
+    <div class="a2-isr">
+      <strong>Beneficio fiscal Art. 93-XXI LISR:</strong> el retiro es 100% libre de ISR (capital + rendimientos) cumpliendo 60 años de edad y manteniendo la inversión al menos 5 años. En caso de fallecimiento, el capital sale libre de ISR en cualquier momento y va directamente a beneficiarios sin juicio sucesorio.
     </div>
-    <div class="prueba-grid">
-      <div class="prueba-card">
-        <div class="prueba-period">Marzo – Junio 2026 · 4 meses</div>
-        <div class="prueba-row">
-          <div>
-            <div class="prueba-lbl">Aportaciones netas</div>
-            <div class="prueba-val">$499,500</div>
-          </div>
-          <div>
-            <div class="prueba-lbl">Saldo actual</div>
-            <div class="prueba-val green">$575,538</div>
-          </div>
-        </div>
-        <div class="prueba-gain">
-          <span>+$76,038</span>
-          <small>en 4 meses · +15.2%</small>
-        </div>
-      </div>
-      <div class="prueba-card">
-        <div class="prueba-period">Febrero – Junio 2026 · 5 meses</div>
-        <div class="prueba-row">
-          <div>
-            <div class="prueba-lbl">Aportaciones netas</div>
-            <div class="prueba-val">$703,500</div>
-          </div>
-          <div>
-            <div class="prueba-lbl">Saldo actual</div>
-            <div class="prueba-val green">$837,990</div>
-          </div>
-        </div>
-        <div class="prueba-gain">
-          <span>+$134,490</span>
-          <small>en 5 meses · +19.1%</small>
-        </div>
-      </div>
-    </div>
-    <p class="prueba-disclaimer">Resultados reales del segmento OptiMaxx Patrimonial. Corresponden a un período de mercado favorable y no representan rendimientos garantizados ni esperados para el futuro. Las inversiones en mercados de valores implican riesgo de pérdida. Los rendimientos pasados no predicen rendimientos futuros. Para el simulador de ahorro mensual, la proyección utiliza una tasa ilustrativa del 12% anual.</p>
-  </div>
-</section>
 
-<!-- ══════════════════════════════════════════ CTA -->
-<section class="cta-final" id="cta">
-  <div class="wrap">
-    <span class="kicker" style="justify-content:center;margin-bottom:16px"><span style="background:var(--oro)"></span>Siguiente paso</span>
-    <h2>Una sesión de 30 minutos puede cambiar la trayectoria de tu patrimonio.</h2>
-    <p>Agenda una llamada sin costo. Te mostramos una proyección con tus números reales y resolvemos todas tus dudas.</p>
-    <div class="cta-btns">
-      <a href="https://calendar.app.google/xSZLcxh7KRXe7u3p7" target="_blank" rel="noopener" class="btn-sec">
-        Agenda tu sesión →
+    <!-- CTA de cierre -->
+    <div class="a2-cierre">
+      <div class="cierre-titulo" id="cierre-nombre">¿Empezamos hoy?</div>
+      <div class="cierre-sub">El primer paso toma 20 minutos. Tu primera aportación puede entrar esta semana.</div>
+      <a class="cierre-btn" href="https://calendar.app.google/xSZLcxh7KRXe7u3p7" target="_blank">
+        Agendar sesión
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z"/></svg>
       </a>
     </div>
-    <div class="cta-trust">
-      <span>Sin costo · Sin compromiso</span>
-      <span>·</span>
-      <span>CONDUSEF · CNSF · SHCP</span>
-      <span>·</span>
-      <span>Exento de ISR a partir de los 60 años (Art. 93-XXI)</span>
+
+    <div class="a2-legal">
+      Proyección ilustrativa con rendimiento 12% anual no garantizado. Desempeño real sujeto a condiciones de mercado.<br>
+      Instrumento regulado · Información exclusiva para uso del asesor en presentaciones autorizadas.
     </div>
-  </div>
-</section>
 
-<footer>
-  <div class="wrap">
-    <span class="foot-brand">MINA Patrimonial</span>
-    <span>Proyección ilustrativa al 12% anual. Rendimientos no garantizados. Los cargos de administración y gestión aplican según condiciones de la póliza. Producto sujeto a condiciones de permanencia. © 2026</span>
   </div>
-</footer>
+</div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
-const TASA_MENSUAL = 0.12 / 12;
-const TASA_BONUS_M = 0.09 / 12;
-const EDAD_RETIRO = 60;
-const INFLACION_ANUAL = 0.04;
+// ──────────────────────────────────────────
+// UTILIDADES
+// ──────────────────────────────────────────
+const fmt = n => '$' + Math.round(n).toLocaleString('es-MX');
+const fmtK = n => {
+  if(n >= 1e6) return '$' + (n/1e6).toFixed(1).replace(/\.0$/,'') + 'M';
+  if(n >= 1e3) return '$' + (n/1e3).toFixed(0) + 'k';
+  return fmt(n);
+};
 
-function getBono(mensual) {
-  if (mensual >= 7500) return 1.00;
-  if (mensual >= 5000) return 0.75;
-  if (mensual >= 3000) return 0.65;
+function getBono(m){
+  if(m >= 7500) return 1.00;
+  if(m >= 5000) return 0.75;
+  if(m >= 3000) return 0.65;
   return 0.55;
 }
 
-function fmt(n) {
-  if (n >= 1e6) return '$' + (n/1e6).toFixed(2).replace(/\.?0+$/, '') + 'M';
-  if (n >= 1e3) return '$' + (n/1e3).toFixed(0) + 'K';
-  return '$' + Math.round(n).toLocaleString('es-MX');
+function calcular(mensual, edad){
+  const anos = Math.max(1, 60 - edad);
+  const r = Math.pow(1 + 0.12/12, anos*12);
+  const saldo = mensual * ((r - 1)/(0.12/12));
+  const totalAp = mensual * anos * 12;
+  const bono = mensual * 12 * getBono(mensual);
+  return { saldo, totalAp, bono, anos };
 }
-function fmtFull(n) { return '$' + Math.round(n).toLocaleString('es-MX'); }
 
-function calcular(mensual, edadActual) {
-  const anos = EDAD_RETIRO - edadActual;
-  const meses = anos * 12;
-  const labels = [], datos = [];
-  let saldo = 0, bonusAc = 0, bonusBase = 0, totalAp = 0;
-  for (let m = 1; m <= meses; m++) {
-    saldo = saldo * (1 + TASA_MENSUAL) + mensual;
-    totalAp += mensual;
-    if (m === 12) { bonusBase = totalAp * getBono(mensual); bonusAc = bonusBase; }
-    else if (m > 12) bonusAc *= (1 + TASA_BONUS_M);
-    if (m % 12 === 0) { labels.push('Año ' + (m/12)); datos.push(Math.round(saldo + bonusAc)); }
+// ISR estimado (escala progresiva simplificada)
+function estimarISR(ingreso){
+  const anual = ingreso * 12;
+  let isr = 0;
+  if(anual <= 123580) isr = anual * 0.1;
+  else if(anual <= 326340) isr = 12358 + (anual - 123580) * 0.16;
+  else if(anual <= 510660) isr = 44760 + (anual - 326340) * 0.21;
+  else if(anual <= 1000000) isr = 83480 + (anual - 510660) * 0.28;
+  else isr = 220960 + (anual - 1000000) * 0.35;
+  return isr / 12; // mensual
+}
+
+// ──────────────────────────────────────────
+// ESTADO
+// ──────────────────────────────────────────
+let estado = { nombre:'', edad:40, ingreso:0, ahorro:0 };
+
+// ──────────────────────────────────────────
+// GANCHO — CONTADOR DE PÉRDIDA
+// ──────────────────────────────────────────
+let perdidaTarget = 38000;
+let perdidaActual = 0;
+let perdidaTimer = null;
+
+function animarPerdida(target){
+  clearInterval(perdidaTimer);
+  const start = Date.now();
+  const duracion = 2000;
+  const from = perdidaActual;
+  perdidaTimer = setInterval(() => {
+    const t = Math.min(1, (Date.now() - start) / duracion);
+    const ease = 1 - Math.pow(1 - t, 3);
+    perdidaActual = from + (target - from) * ease;
+    document.getElementById('perdida-counter').textContent = fmtK(perdidaActual);
+    if(t >= 1){ clearInterval(perdidaTimer); perdidaActual = target; }
+  }, 16);
+}
+
+// Animar al cargar — valor típico para especialista
+setTimeout(() => animarPerdida(38000), 400);
+
+// ──────────────────────────────────────────
+// ACTUALIZAR DIAGNÓSTICO EN VIVO (Acto 1)
+// ──────────────────────────────────────────
+function actualizarDiag(){
+  const nombre  = document.getElementById('i-nombre').value.trim();
+  const edadVal = +document.getElementById('i-edad').value || 0;
+  const ingreso = +document.getElementById('i-ingreso').value || 0;
+  const ahorro  = +document.getElementById('i-ahorro').value || 0;
+
+  // Sincronizar sliders
+  if(edadVal) document.getElementById('sl-edad').value = Math.min(58, Math.max(25, edadVal));
+  if(ingreso) document.getElementById('sl-ingreso').value = Math.min(400000, Math.max(20000, ingreso));
+  if(ahorro)  document.getElementById('sl-ahorro').value = Math.min(25000, Math.max(2000, ahorro));
+
+  estado = { nombre, edad: edadVal || 40, ingreso, ahorro };
+
+  const isr      = ingreso ? estimarISR(ingreso) : 0;
+  const isrTotal = isr * 12 * 20;
+  const anos     = Math.max(0, 60 - (edadVal || 40));
+  const costMes  = ingreso * 0.025; // diferencial rendimiento estimado
+
+  document.getElementById('d-isr').textContent      = ingreso ? fmt(isr) + '/mes' : '—';
+  document.getElementById('d-isr-sub').textContent  = ingreso ? `$${(isr*12).toLocaleString('es-MX')}/año · tasa progresiva estimada` : 'Ingresa tu ingreso para calcular';
+  document.getElementById('d-isr-total').textContent= ingreso ? fmt(isrTotal) : '—';
+  document.getElementById('d-anos').textContent     = edadVal ? anos + ' años' : '—';
+  document.getElementById('d-anos-sub').textContent = edadVal ? `De los ${edadVal} a los 60 · horizonte de acumulación` : 'Tu ventana de acumulación';
+  document.getElementById('d-costo').textContent    = ingreso ? fmt(costMes) + '/mes' : '—';
+
+  // Warning si ahorro es alto o queda poco tiempo
+  const warning = document.getElementById('d-warning');
+  if(ahorro >= 5000 && anos <= 20 && anos > 0){
+    const r1 = calcular(ahorro, edadVal || 40);
+    const r2 = calcular(ahorro, (edadVal || 40) + 2);
+    const diff = r1.saldo - r2.saldo;
+    document.getElementById('d-warning-monto').textContent = fmt(diff);
+    warning.classList.add('visible');
+  } else {
+    warning.classList.remove('visible');
   }
-  return { labels, datos, totalAp, saldoFinal: datos.at(-1)||0, bonusBase, anos };
+
+  // Habilitar botón si hay datos suficientes
+  const listo = ahorro >= 2000 && edadVal >= 25 && edadVal <= 58;
+  document.getElementById('btn-revelar').classList.toggle('ready', listo);
 }
 
-function calcularInflacion(gastoMensual) {
-  return {
-    hoy: gastoMensual,
-    en10: Math.round(gastoMensual * Math.pow(1 + INFLACION_ANUAL, 10)),
-    en25: Math.round(gastoMensual * Math.pow(1 + INFLACION_ANUAL, 25)),
-  };
+// ──────────────────────────────────────────
+// FLUJO DE PANTALLAS
+// ──────────────────────────────────────────
+function mostrar(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
 }
 
-let chart = null;
-
-function buildChart(labels, datos) {
-  const ctx = document.getElementById('curvaChart').getContext('2d');
-  const M = 1_000_000;
-  const colors = datos.map(v => v < M ? 'rgba(99,120,210,.55)' : v < M*3.5 ? 'rgba(37,99,235,.8)' : 'rgba(245,158,11,.9)');
-  if (chart) {
-    chart.data.labels = labels;
-    chart.data.datasets[0].data = datos;
-    chart.data.datasets[0].backgroundColor = colors;
-    chart.update('active');
-    return;
-  }
-  chart = new Chart(ctx, {
-    type: 'bar',
-    data: { labels, datasets: [{ data: datos, backgroundColor: colors, borderRadius: 4, borderSkipped: false }] },
-    options: {
-      responsive: true, maintainAspectRatio: false,
-      animation: { duration: 500, easing: 'easeInOutCubic' },
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: { label: c => '  ' + fmtFull(c.raw), title: t => t[0].label },
-          backgroundColor: 'rgba(11,21,56,.96)', titleColor: 'rgba(200,211,232,.7)',
-          bodyColor: '#fff', bodyFont: { family: 'IBM Plex Mono', size: 13 },
-          padding: 14, cornerRadius: 10, displayColors: false
-        }
-      },
-      scales: {
-        x: { grid: { display: false }, ticks: { color: '#9CA3AF', font: { size: 9 }, maxTicksLimit: 10, maxRotation: 0 } },
-        y: { grid: { color: 'rgba(0,0,0,.04)' }, ticks: { color: '#9CA3AF', font: { size: 9, family: 'IBM Plex Mono' }, callback: v => v >= 1e6 ? '$'+(v/1e6).toFixed(1)+'M' : v >= 1e3 ? '$'+(v/1e3).toFixed(0)+'K' : '$'+v } }
-      }
-    }
-  });
+function irAActo1(){
+  mostrar('s-acto1');
+  document.getElementById('topbar').classList.add('visible');
+  document.getElementById('tb-step-txt').textContent = 'Diagnóstico';
+  document.getElementById('btn-notas').classList.remove('hidden');
+  // pre-llenar sliders
+  document.getElementById('i-edad').value = 40;
+  document.getElementById('i-ingreso').value = 120000;
+  document.getElementById('i-ahorro').value = 8000;
+  actualizarDiag();
 }
 
-function render() {
-  const mensual = +document.getElementById('sl-mensual').value;
-  const edad    = +document.getElementById('sl-edad').value;
-  const gasto   = +document.getElementById('sl-gasto').value;
-  const nombre  = document.getElementById('nombre').value.trim();
-  const r = calcular(mensual, edad);
+function revelar(){
+  const ahorro = +document.getElementById('i-ahorro').value || 8000;
+  const edad   = +document.getElementById('i-edad').value || 40;
+  const nombre = document.getElementById('i-nombre').value.trim() || 'el Doctor';
+  const res    = calcular(ahorro, edad);
 
-  buildChart(r.labels, r.datos);
+  // Mostrar overlay
+  mostrar('s-overlay');
+  document.getElementById('tb-step-txt').textContent = '';
+  document.getElementById('ov-num').textContent = '…';
 
-  // Nombre inline
-  document.getElementById('hero-name-inline').textContent = nombre ? ', ' + nombre.split(' ')[0] : '';
-  document.getElementById('chart-name-label').textContent = nombre || 'Proyección personalizada';
+  setTimeout(() => {
+    document.getElementById('s-overlay').classList.add('reveal');
+    // Animar número en overlay
+    animarNumero('ov-num', res.saldo + res.bono, 1200);
+  }, 100);
 
-  // Stats
-  const mult = r.saldoFinal / r.totalAp;
-  document.getElementById('s-total').textContent        = fmt(r.saldoFinal);
-  document.getElementById('s-rendimientos').textContent = fmt(r.saldoFinal - r.totalAp);
-  document.getElementById('s-aportado').textContent     = fmt(r.totalAp);
-  document.getElementById('s-aportado-sub').textContent = '$' + mensual.toLocaleString('es-MX') + '/mes × ' + r.anos + ' años';
-  document.getElementById('s-mult').textContent         = 'x' + mult.toFixed(1);
+  // Llenar acto 2 en background
+  llenarActo2(nombre, ahorro, edad, res);
 
-  // Inflación
-  const infl = calcularInflacion(gasto);
-  document.getElementById('inf-hoy').textContent  = fmtFull(infl.hoy);
-  document.getElementById('inf-v0').textContent   = fmtFull(infl.hoy);
-  document.getElementById('inf-v10').textContent  = fmtFull(infl.en10);
-  document.getElementById('inf-v25').textContent  = fmtFull(infl.en25);
+  // Ir al acto 2 después de 2.8s
+  setTimeout(() => {
+    mostrar('s-acto2');
+    document.getElementById('s-overlay').classList.remove('reveal');
+    document.getElementById('tb-step-txt').textContent = 'Tu escenario';
+    window.scrollTo(0,0);
+  }, 2800);
+}
 
-  // Milestones
-  const targets = [5, 10, 20, r.anos];
-  const mlabs   = ['5 años', '10 años', '20 años', 'Al retiro · 60'];
-  const ml = document.getElementById('milestones');
-  ml.innerHTML = '';
-  targets.forEach((a, i) => {
-    const val = a <= r.datos.length ? r.datos[a-1] : null;
-    if (!val) return;
-    const ap = mensual * 12 * a;
-    const hi = i === targets.length - 1;
-    ml.innerHTML += `<div class="mile ${hi ? 'mile-hi' : ''}">
-      <div class="mile-yr">${mlabs[i]}</div>
-      <div class="mile-num">${fmt(val)}</div>
-      <div class="mile-ap">aportado: ${fmt(ap)}</div>
-      ${hi ? `<div class="mile-mult">×${(val/ap).toFixed(1)} tu dinero</div>` : ''}
-    </div>`;
-  });
+function animarNumero(elId, target, duracion){
+  const el = document.getElementById(elId);
+  const start = Date.now();
+  const timer = setInterval(() => {
+    const t = Math.min(1, (Date.now() - start) / duracion);
+    const ease = 1 - Math.pow(1 - t, 3);
+    el.textContent = fmt(target * ease);
+    if(t >= 1){ clearInterval(timer); el.textContent = fmt(target); }
+  }, 16);
+}
 
-  // Costo de esperar
-  const ahora = r.saldoFinal;
-  const eg = document.getElementById('esperar-grid');
-  eg.innerHTML = '';
-  [{d:0,cls:'now',tag:'Empiezas hoy'},{d:1,cls:'d1',tag:'Esperas 1 año'},{d:2,cls:'d2',tag:'Esperas 2 años'},{d:3,cls:'d3',tag:'Esperas 3 años'}]
-    .forEach(item => {
-      const val  = item.d === 0 ? ahora : calcular(mensual, edad + item.d).saldoFinal;
-      const diff = ahora - val;
-      eg.innerHTML += `<div class="esp ${item.cls}">
-        <div class="esp-tag">${item.tag}</div>
-        <div class="esp-val">${fmt(val)}</div>
-        <div class="esp-loss">${item.d === 0 ? 'tu máximo' : '− ' + fmt(diff)}</div>
-      </div>`;
-    });
+function llenarActo2(nombre, ahorro, edad, res){
+  const { saldo, totalAp, bono, anos } = res;
+  const totalConBono = saldo + bono;
+  const pctBono = getBono(ahorro);
+
+  // Header
+  const nombreTxt = nombre;
+  document.getElementById('a2-nombre').textContent = nombreTxt ? 'Dr. ' + nombreTxt : 'tu escenario';
+  document.getElementById('cierre-nombre').textContent = nombreTxt ? '¿Empezamos hoy, Dr. ' + nombreTxt + '?' : '¿Empezamos hoy?';
+
+  // Número heroico
+  document.getElementById('a2-total').textContent = fmt(totalConBono);
+
+  // Barra de composición
+  const total = totalConBono || 1;
+  document.getElementById('bar-ap').style.width   = (totalAp / total * 100).toFixed(1) + '%';
+  document.getElementById('bar-rend').style.width = ((saldo - totalAp) / total * 100).toFixed(1) + '%';
+  document.getElementById('bar-bono').style.width = (bono / total * 100).toFixed(1) + '%';
+  document.getElementById('ley-ap').textContent   = fmt(totalAp);
+  document.getElementById('ley-rend').textContent = fmt(saldo - totalAp);
+  document.getElementById('ley-bono').textContent = fmt(bono);
+
+  // Grid métricas
+  document.getElementById('a2-mensual').textContent     = '$' + ahorro.toLocaleString('es-MX') + '/mes';
+  document.getElementById('a2-anos').textContent        = anos;
+  document.getElementById('a2-mult').textContent        = 'x' + (totalConBono / totalAp).toFixed(1);
+  // ISR ahorrado estimado (35% sobre rendimientos)
+  const isrAhorrado = (saldo - totalAp) * 0.30;
+  document.getElementById('a2-isr-ah').textContent = fmt(isrAhorrado);
+
+  // Comparativa CETES vs OptiMaxx
+  const ratoCetes = Math.pow(1 + 0.07/12, anos*12);
+  const sinInst   = ahorro * ((ratoCetes - 1)/(0.07/12));
+  document.getElementById('cmp-sin').textContent = fmt(sinInst);
+  document.getElementById('cmp-con').textContent = fmt(totalConBono);
 
   // Bono
-  const pctBono = getBono(mensual);
-  const ap1     = mensual * 12;
-  const bono    = ap1 * pctBono;
-  document.getElementById('b-ap1').textContent      = fmt(ap1);
-  document.getElementById('b-bono').textContent     = fmt(bono);
-  document.getElementById('b-bono-pct').textContent = 'Bono fidelidad · ' + Math.round(pctBono*100) + '%';
-  document.getElementById('b-bono-desc').textContent = 'bono del ' + Math.round(pctBono*100) + '%';
-  document.getElementById('b-total1').textContent   = fmt(r.datos[0] || 0);
+  document.getElementById('a2-bono-pct').textContent  = Math.round(pctBono*100) + '%';
+  document.getElementById('a2-bono-monto').textContent = fmt(ahorro * 12 * pctBono);
 
-  // Resumen
-  document.getElementById('r-nombre').textContent  = nombre || 'Tu plan de inversión';
-  document.getElementById('r-total').textContent   = fmt(r.saldoFinal);
-  document.getElementById('r-mensual').textContent = '$' + mensual.toLocaleString('es-MX');
-  document.getElementById('r-rend').textContent    = fmt(r.saldoFinal - r.totalAp);
-  document.getElementById('r-mult').textContent    = 'x' + (r.saldoFinal / r.totalAp).toFixed(1);
+  // Costo de esperar
+  const eg = document.getElementById('esp-grid');
+  eg.innerHTML = '';
+  [{d:0,tag:'Empiezas hoy'},{d:1,tag:'Esperas 1 año'},{d:2,tag:'Esperas 2 años'},{d:3,tag:'Esperas 3 años'}]
+    .forEach(item => {
+      const v = item.d === 0 ? totalConBono : calcular(ahorro, edad + item.d).saldo + calcular(ahorro, edad + item.d).bono;
+      const diff = totalConBono - v;
+      eg.innerHTML += `<div class="esp-item${item.d===0?' hoy':''}">
+        <div class="esp-tag">${item.tag}</div>
+        <div class="esp-val">${fmtK(v)}</div>
+        <div class="esp-diff">${item.d===0 ? 'máximo posible' : '− ' + fmtK(diff)}</div>
+      </div>`;
+    });
 }
 
-['sl-mensual','sl-edad','sl-gasto'].forEach(id => {
-  const el = document.getElementById(id);
-  el.addEventListener('input', () => {
-    const dispId = id.replace('sl-', 'val-');
-    document.getElementById(dispId).textContent = (+el.value).toLocaleString('es-MX');
-    render();
-  });
+function volverAInicio(){
+  mostrar('s-gancho');
+  document.getElementById('topbar').classList.remove('visible');
+  document.getElementById('btn-notas').classList.add('hidden');
+  // Reset
+  ['i-nombre','i-edad','i-ingreso','i-ahorro'].forEach(id => document.getElementById(id).value='');
+  document.getElementById('btn-revelar').classList.remove('ready');
+}
+
+// ──────────────────────────────────────────
+// PANEL DE NOTAS
+// ──────────────────────────────────────────
+function toggleNotas(){
+  document.getElementById('panel-notas').classList.toggle('open');
+}
+
+// Teclas
+document.addEventListener('keydown', e => {
+  if(e.key === 'n' || e.key === 'N'){
+    // solo si no está en un input
+    if(!['INPUT','TEXTAREA'].includes(document.activeElement.tagName)){
+      toggleNotas();
+    }
+  }
+  if(e.key === 'Escape'){
+    document.getElementById('panel-notas').classList.remove('open');
+  }
 });
-document.getElementById('nombre').addEventListener('input', render);
-window.addEventListener('load', render);
 </script>
 </body>
 </html>
