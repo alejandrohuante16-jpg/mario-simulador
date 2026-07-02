@@ -697,9 +697,9 @@ input[type=range]:hover::-webkit-slider-thumb{box-shadow:0 0 0 6px rgba(245,158,
     </h1>
 
     <div class="g-perdida-wrap">
-      <div class="g-perdida-label">Capital que deja de crecer cada mes sin una estrategia</div>
+      <div class="g-perdida-label">Rendimiento mensual sin aprovechar · estimado</div>
       <div class="g-perdida-num" id="perdida-counter">$0</div>
-      <div class="g-perdida-sub">Estimado para un médico especialista con ingreso promedio del sector</div>
+      <div class="g-perdida-sub">Capital acumulado promedio de un médico especialista con 10 años de ejercicio,<br>invertido al 12% anual vs tasa bancaria (2%). Diferencial mensual.</div>
     </div>
 
     <p class="g-sub">
@@ -810,9 +810,9 @@ input[type=range]:hover::-webkit-slider-thumb{box-shadow:0 0 0 6px rgba(245,158,
       </div>
 
       <div class="diag-card">
-        <div class="diag-card-label">Lo que dejas ir cada mes (sin estrategia)</div>
+        <div class="diag-card-label">Rendimiento mensual que su capital podría generar</div>
         <div class="diag-card-num rojo" id="d-costo">—</div>
-        <div class="diag-card-sub">Diferencial de rendimiento: capital sin trabajar</div>
+        <div class="diag-card-sub" id="d-costo-sub">Capital acumulado estimado × 12% anual ÷ 12 meses</div>
       </div>
 
       <div class="diag-warning" id="d-warning">
@@ -1041,21 +1041,29 @@ function actualizarDiag(){
   const isr      = ingreso ? estimarISR(ingreso) : 0;
   const isrTotal = isr * 12 * 20;
   const anos     = Math.max(0, 60 - (edadVal || 40));
-  const costMes  = ingreso * 0.025; // diferencial rendimiento estimado
+
+  // Capital acumulado estimado: 15% del ingreso × 12 meses × años de ejercicio (mín 5 años)
+  const anosEjercicio = Math.max(5, (edadVal || 40) - 30);
+  const capitalAcum   = (ingreso || 150000) * 0.15 * 12 * anosEjercicio;
+  // Diferencial: 12% vs 2% banco = 10% anual sobre capital acumulado ÷ 12
+  const costMes = capitalAcum * 0.10 / 12;
 
   document.getElementById('d-isr').textContent      = ingreso ? fmt(isr) + '/mes' : '—';
-  document.getElementById('d-isr-sub').textContent  = ingreso ? `$${(isr*12).toLocaleString('es-MX')}/año · tasa progresiva estimada` : 'Ingrese el ingreso para calcular';
+  document.getElementById('d-isr-sub').textContent  = ingreso ? `$${(isr*12).toLocaleString('es-MX')}/año · tasa progresiva LISR` : 'Ingrese el ingreso para calcular';
   document.getElementById('d-isr-total').textContent= ingreso ? fmt(isrTotal) : '—';
   document.getElementById('d-anos').textContent     = edadVal ? anos + ' años' : '—';
-  document.getElementById('d-anos-sub').textContent = edadVal ? `De los ${edadVal} a los 60 · horizonte de acumulación` : 'Tu ventana de acumulación';
-  document.getElementById('d-costo').textContent    = ingreso ? fmt(costMes) + '/mes' : '—';
+  document.getElementById('d-anos-sub').textContent = edadVal ? `De los ${edadVal} a los 60 · horizonte de acumulación` : 'Su ventana de acumulación';
+  document.getElementById('d-costo').textContent    = fmt(costMes) + '/mes';
+  document.getElementById('d-costo-sub').textContent = `Capital acumulado estimado ${fmt(capitalAcum)} × 10% diferencial anual ÷ 12`;
 
-  // Warning si ahorro es alto o queda poco tiempo
+  // Warning: siempre visible cuando hay aportación y horizonte
   const warning = document.getElementById('d-warning');
-  if(ahorro >= 5000 && anos <= 20 && anos > 0){
-    const r1 = calcular(ahorro, edadVal || 40);
-    const r2 = calcular(ahorro, (edadVal || 40) + 2);
-    const diff = r1.saldo - r2.saldo;
+  const ahorroCalc = ahorro || 8000;
+  const edadCalc   = edadVal || 40;
+  if(ahorroCalc >= 2000 && anos > 0){
+    const r1 = calcular(ahorroCalc, edadCalc);
+    const r2 = calcular(ahorroCalc, edadCalc + 2);
+    const diff = (r1.saldo + r1.bono) - (r2.saldo + r2.bono);
     document.getElementById('d-warning-monto').textContent = fmt(diff);
     warning.classList.add('visible');
   } else {
@@ -1114,7 +1122,7 @@ function revelar(){
   setTimeout(() => {
     mostrar('s-acto2');
     document.getElementById('s-overlay').classList.remove('reveal');
-    document.getElementById('tb-step-txt').textContent = 'Tu escenario';
+    document.getElementById('tb-step-txt').textContent = 'Su escenario';
     window.scrollTo(0,0);
   }, 2800);
 }
@@ -1156,8 +1164,8 @@ function llenarActo2(nombre, ahorro, edad, res){
   document.getElementById('a2-mensual').textContent     = '$' + ahorro.toLocaleString('es-MX') + '/mes';
   document.getElementById('a2-anos').textContent        = anos;
   document.getElementById('a2-mult').textContent        = 'x' + (totalConBono / totalAp).toFixed(1);
-  // ISR ahorrado estimado (35% sobre rendimientos)
-  const isrAhorrado = (saldo - totalAp) * 0.30;
+  // ISR ahorrado: 10% (Art. 129) sobre interés real (~65% de rendimientos nominales descontando inflación 4%)
+  const isrAhorrado = (saldo - totalAp) * 0.65 * 0.10;
   document.getElementById('a2-isr-ah').textContent = fmt(isrAhorrado);
 
   // Comparativa CETES vs OptiMaxx
@@ -1173,7 +1181,7 @@ function llenarActo2(nombre, ahorro, edad, res){
   // Costo de esperar
   const eg = document.getElementById('esp-grid');
   eg.innerHTML = '';
-  [{d:0,tag:'Empiezas hoy'},{d:1,tag:'Esperas 1 año'},{d:2,tag:'Esperas 2 años'},{d:3,tag:'Esperas 3 años'}]
+  [{d:0,tag:'Inicia hoy'},{d:1,tag:'Espera 1 año'},{d:2,tag:'Espera 2 años'},{d:3,tag:'Espera 3 años'}]
     .forEach(item => {
       const v = item.d === 0 ? totalConBono : calcular(ahorro, edad + item.d).saldo + calcular(ahorro, edad + item.d).bono;
       const diff = totalConBono - v;
